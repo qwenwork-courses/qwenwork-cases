@@ -67,7 +67,9 @@ CASES.push(
   "video": {
     "src": "https://cloud.video.taobao.com/vod/hhzvTOAjBgG089B-xCRMTHMeaH-h65jwwORDCtxWgXQ.mp4",
     "poster": "https://img.alicdn.com/imgextra/i4/O1CN01G6tRq5mMbeH58jg0_!!6000000001629-2-videocover-2532-1356.png",
-    "caption": "合同审查完整操作演示 · 28 秒"
+    "caption": "合同审查完整操作演示 · 28 秒",
+    "width": 1216,
+    "height": 720
   },
   "prompt": "帮我审查这份合同，我方是甲方（采购方）。按《民法典》及最新司法解释做高/中/低风险分级，每条意见给出条款位置、风险等级、问题描述、修改建议和具体法律依据条文号，最后生成交互式 HTML 审查界面。",
   "audience": [

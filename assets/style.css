@@ -970,21 +970,25 @@ ul { margin: 0; padding: 0; list-style: none; }
   line-height: 1.8;
 }
 
-/* 视频演示区块 */
+/* 视频演示区块：严格按视频原比例、不超采样，避免两侧或上下黑边 */
 .video-block {
-  margin: 0 0 8px;
+  width: 100%;
+  max-width: 1216px;      /* 当前案例视频原尺寸宽 1216px；屏宽 > 1216 时保持原尺不拉伸发糊 */
+  margin: 0 auto 8px;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   overflow: hidden;
-  background: #000;
   box-shadow: var(--shadow-md);
 }
 .video-block video {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 72vh;
-  background: #000;
+  height: auto;           /* 高度按原比例自动，不封顶 */
+  /* aspect-ratio 由渲染时读取 video.width/height 写入 inline style；
+     目的：避免 poster 图不同尺寸时预加载阶段把元素撜成错的高度。
+     object-fit: cover 确保 poster 铺满，避免与视频不同宽高比时出现上下黑条；
+     视频自身因与元素同宽高比（来自同一组 width/height），不会被裁切 */
+  object-fit: cover;
 }
 .video-block figcaption {
   padding: 11px 16px;

@@ -55,7 +55,9 @@ CASES.push(
   "video": {
     "src": "https://cloud.video.taobao.com/vod/szoB_qxDIC6MMHe6TwPn2MhZ4TwAI3aXtZ-bNaFdiSM.mp4",
     "poster": "https://img.alicdn.com/imgextra/i1/6000000002768/O1CN01jnOAwwdHpxC3hbvU_!!6000000002768-0-tbvideo.jpg",
-    "caption": "看板完整操作演示 · 21 秒"
+    "caption": "看板完整操作演示 · 21 秒",
+    "width": 1216,
+    "height": 720
   },
   "demoLine": [
     "顶部先看 2027 届目标完成度（50 人已招 18 人）与累计投递 128 份",
