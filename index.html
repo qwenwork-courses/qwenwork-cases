@@ -656,12 +656,10 @@ function renderDetail() {
     const label = c.video ? '03 / 视频演示' : '03 / 演示路径';
     sec.innerHTML = `
       <span class="section-label">${label}</span>
-      <h2>${c.video ? '完整操作看这里' : '怎么用？'}</h2>
       ${c.video ? `
         <figure class="video-block">
-          <video src="${c.video.src}" poster="${c.video.poster || ''}" controls playsinline preload="metadata"></video>
-          ${c.video.caption ? `<figcaption>${c.video.caption}</figcaption>` : ''}
-        </figure>` : ''}
+          <video src="${c.video.src}" poster="${c.video.poster || ''}" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata"></video>
+        </figure>` : '<h2>怎么用？</h2>'}
       ${c.demoLine.length ? `<ul class="demo-line${c.video ? ' after-video' : ''}">${c.demoLine.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}
     `;
     wrap.appendChild(sec);

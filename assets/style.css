@@ -409,13 +409,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .dept-head h2 {
   margin: 0;
-  font-size: 21px;
+  font-size: 27px;
   letter-spacing: -0.03em;
-  font-weight: 650;
+  font-weight: 700;
 }
 .dept-head .en {
   color: var(--accent-3);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
