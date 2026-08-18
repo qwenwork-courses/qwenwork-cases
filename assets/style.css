@@ -167,11 +167,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   background-repeat: no-repeat;
 }
 
-/* 背景图三选一：JS 根据 ?bg=a|b|c 在 <html> 上加类。
-   url() 写在样式表里，相对 assets/style.css 解析，比 CSS 变量套 url() 可靠。*/
-html.bg-a .hero { background-image: url('bg/bg-a.png'); }
-html.bg-b .hero { background-image: url('bg/bg-b.png'); }
-html.bg-c .hero { background-image: url('bg/bg-c.png'); }
+/* 背景图走 CDN，避免大图拖慢首屏 */
+.hero { background-image: url('https://gw.alicdn.com/imgextra/i4/O1CN01EdrpzppuUaK3daAC_!!6000000004455-2-tps-1792-1024.png'); }
 
 /* 白色柔化层：只在文字区域洗一层，保留四角色彩；底部渐隐接页面底色 */
 .hero::before {

@@ -49,7 +49,7 @@ const CASES = [
     ],
     before: '几十页 PDF + 一份 Word 批注，业务方读不出优先级',
     after: '一个可交互工作台，hover 看联动、点一下成修订稿、导出即定稿',
-    cover: 'assets/covers/contract-review.png',
+    cover: 'https://gw.alicdn.com/imgextra/i4/O1CN01tW3dbc8r8cB3FPds_!!6000000006197-2-tps-1600-900.png',
     demoLine: [
       '打开页面，顶部统计卡展示风险分布（高 / 中 / 低 / 需人工复核）',
       '悬停任意高风险条款，右栏意见卡自动定位高亮',
@@ -122,7 +122,7 @@ const CASES = [
     ],
     before: '线下表格 + 微信催办，过程不可见、结果不可比',
     after: '全员线上协同，过程留痕、结果可比、SOP 沉淀在系统里',
-    cover: 'assets/covers/hr-performance.png',
+    cover: 'https://gw.alicdn.com/imgextra/i3/O1CN01K9w7kN7XQVH3FPds_!!6000000001125-2-tps-1600-900.png',
     demoLine: [
       '开篇看「线下考核黑箱」，三条断链引出问题',
       '走一遍全生命周期：岗位画像生成指标 → 自动跟催 → 结果发布',
@@ -195,7 +195,7 @@ const CASES = [
     ],
     before: '导数据拼表一整天，只看得过来几个主力 ASIN',
     after: '全店自动巡查出周报，业务随时问、系统按证据答',
-    cover: 'assets/covers/amazon-ads.png',
+    cover: 'https://gw.alicdn.com/imgextra/i2/O1CN01P4G6R4n6XoB3FPds_!!6000000003387-2-tps-1600-900.png',
     demoLine: [
       '先看「7 步法」了解人工分析成本藏在哪',
       '打开多店周报：图形总览 → 优先复核清单 → ASIN 数据卡片',
@@ -269,7 +269,7 @@ const CASES = [
     ],
     before: '微信派单 + 事后报销，过程无数据、服务无评价',
     after: '申请到满意度五段闭环，量质费效一屏可见',
-    cover: 'assets/covers/admin-reception.png',
+    cover: 'https://gw.alicdn.com/imgextra/i4/O1CN01RHpHFaYWjgD3FPds_!!6000000007070-2-tps-1600-900.png',
     demoLine: [
       '先看「三条断链」：人工在跑、数据在丢、管理看不到',
       '看「1+2+1」架构图，AI 表格为什么是中枢',
@@ -317,7 +317,7 @@ const CASES = [
     ],
     before: '五个工种串行，一讲拖两周，字幕对轴一下午',
     after: '一份文字稿进，五件套出，人只在六个卡点做决策',
-    cover: 'assets/covers/course-creation.png',
+    cover: 'https://gw.alicdn.com/imgextra/i1/O1CN016YHmpQpVnZH3FPds_!!6000000003234-2-tps-1600-900.png',
     demoLine: [
       '先看 SOP 流程图，分清哪四段是机器干、哪六个卡点是人干',
       '输入门槛：有文字稿最好，只有大纲也能直接起步',
