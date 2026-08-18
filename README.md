@@ -9,11 +9,22 @@ qwenwork-cases/
 ├── index.html          主页面（含路由与渲染逻辑，logo 以 base64 内联）
 ├── assets/
 │   ├── style.css       样式（品牌绿浅色主题，设计令牌集中在 :root）
-│   ├── data.js         ★ 数据源，日常只改这个文件
+│   ├── data.js         部门定义 DEPTS + 首页文案 SITE（CASES 在此声明为空数组）
+│   ├── cases/          ★ 一个案例一个文件，<id>.js 各自 CASES.push({...}) 自注册
 │   ├── qr.js           二维码编码器（byte 模式，无依赖）
 │   └── poster.js       分享海报 canvas 渲染
 └── demos/              演示物料（HTML / SVG / ZIP）
 ```
+
+### 案例文件是怎么装载的
+
+纯静态无构建，靠 `<script>` 标签按顺序加载（不用 ES module，保证双击 `index.html` 也能直接开）：
+
+1. `data.js` 先执行，声明 `const CASES = []`（以及 DEPTS / SITE）；
+2. `assets/cases/<id>.js` 逐个执行，每个 `CASES.push({...})` 把自己注册进去；
+3. 最后内联脚本渲染页面。
+
+**部门内的卡片顺序 = `index.html` 里那批 `<script>` 的排列顺序**（不是文件名排序）。
 
 ## 收藏与分享
 
@@ -91,11 +102,35 @@ media: { type: 'image', src: '<CDN 或 demos/xxx.gif>', caption: '风险条款 h
 
 ## 怎么加一个新案例
 
-在 `data.js` 的 `CASES` 数组里追加一个对象，页面自动出现在对应部门分组下。
+两步（每个案例一个文件，并行改不同案例不会撞车）：
+
+1. 新建 `assets/cases/<你的id>.js`，内容：
+   ```js
+   /* 部门名 · 案例标题  (live) */
+   CASES.push({
+     id: '<你的id>',
+     dept: 'hr',
+     status: 'live',
+     // ...其余字段见下表
+   });
+   ```
+2. 在 `index.html` 的案例脚本列表（`data.js` 之后那批 `<script>`）里，在对应部门位置追加一行：
+   ```html
+   <script src="assets/cases/<你的id>.js"></script>
+   ```
+   放在哪个位置 = 卡片在部门内的前后顺序。
+
+改现有案例：直接改对应的 `assets/cases/<id>.js`，不碰其他文件。
+
+> 为什么拆文件：之前所有案例堆在一个 `data.js` 里，多人/多分支并行改案例会在该文件冲突。拆后不同案例 = 不同文件，案例内容零冲突；唯一的共享改动是 `index.html` 那一行 `<script>`，而它是“追加行”，即使两个分支各加一行，合并时也只是“两行都保留”，极好解。
+
+新增部门：在 `data.js` 的 `DEPTS` 里加一条，`icon` 取 `index.html` 中 `ICONS` 已定义的名称。
+
+案例字段说明：
 
 | 字段 | 说明 |
 |---|---|
-| `id` | 唯一标识，用于 URL（`#/case/<id>`） |
+| `id` | 唯一标识，用于 URL（`#/case/<id>`），建议与文件名一致 |
 | `dept` | 部门 id，需在 `DEPTS` 中存在 |
 | `status` | `live` 可演示 / `demo` 有素材 / `wip` 待补充 |
 | `title` | 案例名称（卡片与详情页大标题） |
@@ -112,8 +147,6 @@ media: { type: 'image', src: '<CDN 或 demos/xxx.gif>', caption: '风险条款 h
 | `prompt` | 「复制 Prompt」区块与卡片上「一键复制 Prompt」的内容 |
 | `audience` | 适合的角色数组（卡片只叠前 3 个） |
 | `links` | `{label, href, kind}`，kind 取 `live`/`demo`/`doc`/`file` |
-
-新增部门：在 `DEPTS` 里加一条，`icon` 取 `index.html` 中 `ICONS` 已定义的名称。
 
 ## 详情页结构
 
