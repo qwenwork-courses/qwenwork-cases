@@ -44,7 +44,7 @@ CASES.push(
   ],
   "before": "几十页 PDF + 一份 Word 批注，业务方读不出优先级",
   "after": "一个可交互工作台，hover 看联动、点一下成修订稿、导出即定稿",
-  "cover": "https://gw.alicdn.com/imgextra/i4/O1CN01tW3dbc8r8cB3FPds_!!6000000006197-2-tps-1600-900.png",
+  "cover": "https://img.alicdn.com/imgextra/i4/O1CN01G6tRq5mMbeH58jg0_!!6000000001629-2-videocover-2532-1356.png",
   "demoLine": [
     "打开页面，顶部统计卡展示风险分布（高 / 中 / 低 / 需人工复核）",
     "悬停任意高风险条款，右栏意见卡自动定位高亮",
@@ -59,7 +59,16 @@ CASES.push(
       "kind": "doc"
     }
   ],
-  "media": null,
+  "media": {
+    "type": "image",
+    "src": "https://gw.alicdn.com/imgextra/i2/O1CN01QN1NZo2w6eI2b872_!!6000000004050-1-tps-1280-716.gif",
+    "caption": "合同审查工作台操作实录 · 自动循环"
+  },
+  "video": {
+    "src": "https://cloud.video.taobao.com/vod/hhzvTOAjBgG089B-xCRMTHMeaH-h65jwwORDCtxWgXQ.mp4",
+    "poster": "https://img.alicdn.com/imgextra/i4/O1CN01G6tRq5mMbeH58jg0_!!6000000001629-2-videocover-2532-1356.png",
+    "caption": "合同审查完整操作演示 · 28 秒"
+  },
   "prompt": "帮我审查这份合同，我方是甲方（采购方）。按《民法典》及最新司法解释做高/中/低风险分级，每条意见给出条款位置、风险等级、问题描述、修改建议和具体法律依据条文号，最后生成交互式 HTML 审查界面。",
   "audience": [
     "法务",
