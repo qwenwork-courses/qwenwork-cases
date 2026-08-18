@@ -475,5 +475,12 @@ const SITE = {
   searchPlaceholder: '搜索场景、问题或业务目标',
   /* 热门场景快捷标签：每个词必须能搜到结果，新增后先在页面上点一下验证 */
   hotScenes: ['合同审查', '绩效管理', '亚马逊广告', '行政接待', '制课'],
+  /* 联系/预约表单（钉钉多维表格）——顶部「预约演示」与页脚「联系我们」共用 */
+  contactForm: {
+    url: 'https://alidocs.dingtalk.com/notable/share/form/v01Lk3lbmGYVL5w7Om9_dv19yqvsgs3oebp3pcjys_1qX0QQ0?source=link',
+    title: '预约演示 / 联系我们',
+    desc: '留下联系方式与需求，我们会尽快和你对接具体场景。',
+    fields: ['姓名', '联系电话', '公司', '职位', '需求']
+  },
   cta: { label: '预约了解更多', href: '#contact' }
 };

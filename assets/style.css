@@ -1286,6 +1286,99 @@ ul { margin: 0; padding: 0; list-style: none; }
   .modal-actions .btn { padding: 7px 10px; font-size: 12px; }
 }
 
+/* ===================================================== 联系/预约弹窗 ==== */
+.form-modal .form-panel {
+  position: relative;
+  width: min(460px, 100%);
+  padding: 38px 36px 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.26s cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+.form-modal.show .form-panel { transform: none; }
+
+.form-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--subtle);
+  display: grid;
+  place-items: center;
+  transition: all 0.18s ease;
+}
+.form-close:hover { background: var(--surface-2); color: var(--text); }
+
+.form-ic {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 24px rgba(48, 191, 105, 0.3);
+}
+
+.form-panel h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+.form-desc {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* 表单字段预告，让客户知道要填什么 */
+.form-fields {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 0 26px;
+}
+.form-fields li {
+  padding: 5px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.form-actions .btn { flex: 1; min-width: 150px; justify-content: center; }
+
+.form-hint {
+  margin: 18px 0 0;
+  color: var(--subtle);
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .form-modal .form-panel { padding: 32px 22px 26px; }
+  .form-panel h3 { font-size: 19px; }
+  .form-actions .btn { flex: none; width: 100%; }
+}
+
 /* ============================================================== Toast ==== */
 .toast {
   position: fixed;

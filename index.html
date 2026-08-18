@@ -19,7 +19,7 @@
       <span class="brand-sub">案例库</span>
     </a>
     <nav class="main-nav" id="mainNav"></nav>
-    <a class="header-cta" href="#contact">
+    <a class="header-cta" href="#" id="ctaTop">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M7 7l6-6"/><path d="M10 1h3v3"/></svg>
       预约演示
     </a>
@@ -36,7 +36,7 @@
       <h3>想看更多案例？想聊聊你的场景？</h3>
       <p>我们在持续沉淀各行业 × 各部门的交付实践。如果这里有一个案例让你产生了联想，随时可以聊。</p>
     </div>
-    <a href="#" class="btn primary" target="_blank">
+    <a href="#" class="btn primary" id="ctaFooter">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z"/></svg>
       联系我们
     </a>
@@ -51,6 +51,32 @@
 <button class="to-top" id="toTop" aria-label="回到顶部">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
+
+<!-- ===================================================== 联系/预约弹窗 === -->
+<div class="modal-backdrop form-modal" id="formModal" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+  <div class="form-panel" role="document">
+    <button type="button" class="form-close" id="formClose" aria-label="关闭">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="form-ic">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z"/></svg>
+    </div>
+    <h3 id="formTitle">预约演示 / 联系我们</h3>
+    <p class="form-desc" id="formDesc"></p>
+    <ul class="form-fields" id="formFields"></ul>
+    <div class="form-actions">
+      <a class="btn primary" id="formOpen" href="#" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+        打开表单填写
+      </a>
+      <button type="button" class="btn" id="formCopy">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
+        复制表单链接
+      </button>
+    </div>
+    <p class="form-hint">也可以把链接发给客户，让对方直接填写</p>
+  </div>
+</div>
 
 <!-- ========================================================= 预览弹窗 === -->
 <div class="modal-backdrop" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
@@ -728,7 +754,49 @@ document.addEventListener('click', e => {
   }
   if (e.target.matches('#previewModal') || e.target.closest('#previewClose')) closeModal();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeModal();
+  closeFormModal();
+});
+
+/* ---------- 联系/预约表单弹窗 ---------- */
+/* 钉钉表单页不能用 iframe 内嵌（未设 X-Frame-Options，但被框住时内部 JS 不渲染，
+   只转圈）；而且跳域 iframe 的 onload 照样会触发，无法程序化判定失败。
+   因此弹窗不嵌 iframe，而是给入口 + 链接，行为确定、不会开天窗。*/
+function openFormModal() {
+  const cf = (SITE.contactForm || {});
+  const box = $('#formModal');
+  if (!cf.url || !box) return;
+  $('#formTitle').textContent = cf.title || '联系我们';
+  $('#formDesc').textContent = cf.desc || '';
+  $('#formFields').innerHTML = (cf.fields || []).map(f => `<li>${f}</li>`).join('');
+  $('#formOpen').href = cf.url;
+  box.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('#formOpen').focus(), 60);
+}
+function closeFormModal() {
+  const box = $('#formModal');
+  if (!box) return;
+  box.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+$('#ctaTop').addEventListener('click', e => { e.preventDefault(); openFormModal(); });
+$('#ctaFooter').addEventListener('click', e => { e.preventDefault(); openFormModal(); });
+$('#formClose').addEventListener('click', closeFormModal);
+$('#formModal').addEventListener('click', e => { if (e.target.id === 'formModal') closeFormModal(); });
+$('#formCopy').addEventListener('click', () => {
+  const btn = $('#formCopy');
+  const label = btn.innerHTML;
+  writeClipboard((SITE.contactForm || {}).url || '').then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `${svgIcon('check', 16)} 已复制`;
+    toast('表单链接已复制');
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = label; }, 2000);
+  }).catch(() => toast('复制失败，请手动复制'));
+});
 
 /* ---------- Scroll ---------- */
 const toTop = $('#toTop');
