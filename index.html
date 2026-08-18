@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="千问办公使用演示合集——按部门呈现真实业务场景案例，可直接给客户演示的交付物案例库。">
+  <meta name="theme-color" content="#5b4bff">
+  <title>千问办公 · 案例库</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- ============================================================ Header === -->
+<header class="site-header">
+  <div class="inner">
+    <a href="#" class="brand" data-nav="home">
+      <img class="brand-logo" src="assets/logo.png" alt="千问办公">
+      <span class="brand-divider"></span>
+      <span class="brand-sub">案例库</span>
+    </a>
+    <nav class="main-nav" id="mainNav"></nav>
+    <a class="header-cta" href="#contact">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M7 7l6-6"/><path d="M10 1h3v3"/></svg>
+      预约演示
+    </a>
+  </div>
+</header>
+
+<!-- ============================================================== Main === -->
+<main id="app"></main>
+
+<!-- ============================================================ Footer === -->
+<footer class="site-footer" id="contact">
+  <div class="footer-inner">
+    <div>
+      <h3>想看更多案例？想聊聊你的场景？</h3>
+      <p>我们在持续沉淀各行业 × 各部门的交付实践。如果这里有一个案例让你产生了联想，随时可以聊。</p>
+    </div>
+    <a href="#" class="btn primary" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z"/></svg>
+      联系我们
+    </a>
+  </div>
+  <div class="footer-meta">
+    <span>© 2026 千问办公</span>
+    <span>仅限内部使用</span>
+  </div>
+</footer>
+
+<!-- ========================================================= 回到顶部 === -->
+<button class="to-top" id="toTop" aria-label="回到顶部">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ========================================================= 预览弹窗 === -->
+<div class="modal-backdrop" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+  <div class="modal-panel" role="document">
+    <div class="modal-head">
+      <span class="modal-title" id="previewTitle">预览</span>
+      <div class="modal-actions">
+        <a class="btn" id="previewDownload" href="#" download>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+          下载
+        </a>
+        <button type="button" class="btn modal-close" id="previewClose" aria-label="关闭预览">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          关闭
+        </button>
+      </div>
+    </div>
+    <iframe class="modal-frame" id="previewFrame" src="about:blank" title="预览"></iframe>
+  </div>
+</div>
+
+<!-- ============================================================== Data === -->
+<script src="assets/data.js"></script>
+
+<!-- ============================================================== App ==== -->
+<script>
+/* ---------- helpers ---------- */
+const $ = (s, e = document) => e.querySelector(s);
+const $$ = (s, e = document) => [...e.querySelectorAll(s)];
+const h = (tag, cls = '', html = '') => { const el = document.createElement(tag); if (cls) el.className = cls; if (html) el.innerHTML = html; return el; };
+
+/* Icons (inline SVG paths, heroicons-mini style) */
+const ICONS = {
+  scale: '<path d="M12 3v1.5M18.36 5.64l-1.06 1.06M21 12h-1.5M18.36 18.36l-1.06-1.06M12 19.5V21M7.05 18.36l-1.06 1.06M4.5 12H3M7.05 5.64 5.99 4.58"/>',
+  users: '<path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0z"/>',
+  megaphone: '<path d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46"/>',
+  building: '<path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>',
+  play: '<path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653z"/>',
+  coins: '<path d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 3.75c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>',
+  target: '<M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/>',
+  gauge: '<path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>',
+  arrowR: '<path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>',
+  alertTri: '<path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>',
+  pain: '<path d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z"/>',
+  check: '<path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>',
+  copy: '<path d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/>',
+  link: '<path d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/>',
+  doc: '<path d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z"/>',
+  download: '<path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>',
+  live: '<path d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>',
+  bookmark: '<path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0z"/>',
+  share: '<path d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185z"/>',
+  search: '<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z"/>',
+  close: '<path d="M6 18 18 6M6 6l12 12"/>'
+};
+
+const svgIcon = (name, size = 24) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ''}</svg>`;
+
+/* 封面色 */
+const CARD_COLORS = [
+  ['#eff1ff','#dfe4ff'], ['#e8f5f2','#d0ebe5'], ['#fef4e8','#fde9d0'],
+  ['#fce8f0','#f7d0df'], ['#eef6ff','#ddeeff'], ['#f5edff','#e8daff'],
+  ['#fdf2f2','#f8e0e0'], ['#ecfdf5','#d1fae5']
+];
+
+/* ---------- State ---------- */
+let currentDept = null;      // null = 全部
+let searchQuery = '';        // 搜索关键词
+let currentView = 'gallery'; // 'gallery' | 'detail'
+let currentCase = null;
+
+/* 背景图：定稿用方案 A。仍保留 ?bg=b|c 方便以后对比换图 */
+(function applyBg() {
+  const pick = (new URLSearchParams(location.search).get('bg') || 'a').toLowerCase();
+  const file = ['a', 'b', 'c'].includes(pick) ? pick : 'a';
+  document.documentElement.classList.add(`bg-${file}`);
+})();
+
+/* ---------- 收藏 / 浏览量 / 分享 / 复制 ---------- */
+/* 环境可能不支持 localStorage，统一走 try/catch + 内存回退 */
+const FAV_KEY = 'qw_cases_fav';
+let favMem = null;
+function readFavs() {
+  if (favMem) return favMem;
+  try {
+    favMem = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+  } catch (e) { favMem = new Set(); }
+  return favMem;
+}
+function isFav(id) { return readFavs().has(id); }
+function toggleFav(id) {
+  const s = readFavs();
+  s.has(id) ? s.delete(id) : s.add(id);
+  try { localStorage.setItem(FAV_KEY, JSON.stringify([...s])); } catch (e) { /* 内存模式 */ }
+  return s.has(id);
+}
+
+function toast(msg) {
+  let el = $('#toast');
+  if (!el) { el = h('div', 'toast'); el.id = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+/* 剪贴板写入：navigator.clipboard 在 http 非 localhost 下不可用，回退 execCommand */
+function writeClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy') ? resolve() : reject(); } catch (e) { reject(e); }
+    ta.remove();
+  });
+}
+function copyText(text, btn, restoreHTML) {
+  writeClipboard(text).then(() => {
+    btn.classList.add('copied');
+    const size = restoreHTML.includes('14') ? 14 : 15;
+    btn.innerHTML = `${svgIcon('check', size)} 已复制`;
+    toast('Prompt 已复制到剪贴板');
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = restoreHTML; }, 2000);
+  }).catch(() => toast('复制失败，请手动选中文本'));
+}
+
+function shareCase(c) {
+  const url = `${location.origin}${location.pathname}#/case/${c.id}`;
+  if (navigator.share) {
+    navigator.share({ title: `${c.title} ・ 千问办公案例库`, text: c.slogan, url }).catch(() => {});
+    return;
+  }
+  writeClipboard(url).then(() => toast('案例链接已复制')).catch(() => toast('分享失败'));
+}
+
+/* ---------- Routing ---------- */
+function navigate(view, id) {
+  if (view === 'detail' && id) {
+    currentView = 'detail';
+    currentCase = CASES.find(c => c.id === id) || null;
+    window.history.pushState({ view, id }, '', `#/case/${id}`);
+  } else {
+    currentView = 'gallery';
+    currentCase = null;
+    window.history.pushState({ view: 'gallery' }, '', '#/');
+  }
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+window.addEventListener('popstate', (e) => {
+  const s = e.state || {};
+  if (s.view === 'detail' && s.id) {
+    currentView = 'detail';
+    currentCase = CASES.find(c => c.id === s.id) || null;
+  } else {
+    currentView = 'gallery';
+    currentCase = null;
+  }
+  render();
+});
+
+/* ---------- Init ---------- */
+function initFromHash() {
+  const m = location.hash.match(/^#\/case\/(.+)$/);
+  if (m) { currentView = 'detail'; currentCase = CASES.find(c => c.id === m[1]) || null; }
+}
+
+/* ---------- Gallery ---------- */
+/* Hero 只在进入首页时渲染一次；搜索/筛选只重绘 #results，否则输入框会失焦 */
+function renderGallery() {
+  const app = $('#app');
+  app.innerHTML = '';
+  const wrap = h('div', 'view');
+
+  const liveCount = CASES.filter(c => c.status !== 'wip').length;
+  const deptCount = new Set(CASES.map(c => c.dept)).size;
+
+  wrap.innerHTML = `
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-stats-line">
+          <span class="chev left">〈〈〈</span>
+          <span>${liveCount} 个真实交付 · ${deptCount} 大部门 · ${CASES.length} 个落地案例</span>
+          <span class="chev right">〉〉〉</span>
+        </div>
+        <h1>${SITE.title}</h1>
+        <p class="hero-sub">${SITE.subtitle}</p>
+
+        <div class="hero-search">
+          <span class="search-ic">${svgIcon('search', 20)}</span>
+          <input type="search" id="searchInput" placeholder="${SITE.searchPlaceholder}"
+                 autocomplete="off" aria-label="搜索案例" value="${searchQuery.replace(/"/g, '&quot;')}">
+          <button type="button" class="search-clear ${searchQuery ? 'show' : ''}" id="searchClear" aria-label="清空搜索">${svgIcon('close', 16)}</button>
+        </div>
+
+        <div class="hot-scenes">
+          <span class="hot-label">热门场景：</span>
+          ${SITE.hotScenes.map(s => `<button type="button" class="hot-chip ${searchQuery === s ? 'active' : ''}" data-scene="${s}">${s}</button>`).join('')}
+        </div>
+
+        <div class="hero-slogan"><span>${SITE.slogan}</span></div>
+      </div>
+    </section>
+    <section class="gallery">
+      <div class="toolbar">
+        <div class="dept-filter" id="deptFilter"></div>
+        <div class="toolbar-right"><span class="results-count" id="resultsCount"></span></div>
+      </div>
+      <div id="results"></div>
+    </section>
+  `;
+  app.appendChild(wrap);
+
+  /* 搜索交互：只重绘 #deptFilter 与 #results，不碰 input，因此焦点不丢 */
+  const input = $('#searchInput');
+  const clearBtn = $('#searchClear');
+  const onSearch = () => {
+    searchQuery = input.value.trim();
+    clearBtn.classList.toggle('show', !!searchQuery);
+    syncHotChips();
+    renderDeptFilter();  /* 胶囊计数跟着搜索词变 */
+    renderResults();
+  };
+  input.addEventListener('input', onSearch);
+  clearBtn.addEventListener('click', () => {
+    searchQuery = '';
+    input.value = '';
+    clearBtn.classList.remove('show');
+    syncHotChips();
+    renderDeptFilter();
+    renderResults();
+    input.focus();
+  });
+
+  /* 热门场景快捷标签：再点一次取消 */
+  $$('.hot-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const s = chip.dataset.scene;
+      searchQuery = (searchQuery === s) ? '' : s;
+      input.value = searchQuery;
+      clearBtn.classList.toggle('show', !!searchQuery);
+      syncHotChips();
+      renderDeptFilter();
+      renderResults();
+    });
+  });
+
+  renderDeptFilter();
+  renderResults();
+}
+
+function syncHotChips() {
+  $$('.hot-chip').forEach(c => c.classList.toggle('active', c.dataset.scene === searchQuery));
+}
+
+/* 部门筛选胶囊：计数随当前搜索词变化 */
+function renderDeptFilter() {
+  const box = $('#deptFilter');
+  if (!box) return;
+  const hits = CASES.filter(c => matchCase(c, searchQuery));
+  box.innerHTML = '';
+  const allBtn = h('button', `dept-chip ${currentDept === null ? 'active' : ''}`, `全部 <span class="count">${hits.length}</span>`);
+  allBtn.onclick = () => { currentDept = null; renderDeptFilter(); renderResults(); };
+  box.appendChild(allBtn);
+  DEPTS.forEach(d => {
+    const cnt = hits.filter(c => c.dept === d.id).length;
+    if (!cnt) return;
+    const btn = h('button', `dept-chip ${currentDept === d.id ? 'active' : ''}`, `${d.name} <span class="count">${cnt}</span>`);
+    btn.onclick = () => { currentDept = d.id; renderDeptFilter(); renderResults(); };
+    box.appendChild(btn);
+  });
+}
+
+/* 全文匹配：标题/slogan/概述/标签/痛点/方案/人群/部门名/客户均参与，多词需全部命中。
+   注意：不能把 dept.desc 加进来——部门描述里的词会让同部门所有案例被误命中
+   （如法务 desc 含“合同”，会导致搜“合同”时把招投标案例也带出来）*/
+function matchCase(c, q) {
+  if (!q) return true;
+  const dept = DEPTS.find(d => d.id === c.dept) || {};
+  const hay = [
+    c.title, c.slogan, c.summary, c.client, c.clientNote, c.before, c.after, c.prompt,
+    dept.name, dept.en,
+    ...(c.tags || []), ...(c.audience || []), ...(c.pains || []),
+    ...(c.solutions || []), ...(c.demoLine || []),
+    ...(c.metrics || []).map(m => `${m.value} ${m.label}`),
+    ...(c.links || []).map(l => l.label)
+  ].filter(Boolean).join(' ').toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every(t => hay.includes(t));
+}
+
+function renderResults() {
+  const box = $('#results');
+  if (!box) return;
+  box.innerHTML = '';
+
+  const hits = CASES.filter(c => matchCase(c, searchQuery) && (currentDept ? c.dept === currentDept : true));
+  const countEl = $('#resultsCount');
+  if (countEl) {
+    countEl.textContent = searchQuery
+      ? `匹配到 ${hits.length} 个案例`
+      : `${hits.length} 个案例`;
+  }
+
+  if (!hits.length) {
+    box.innerHTML = `<div class="empty-state">
+      <strong>没找到匹配“${searchQuery}”的案例</strong>
+      <span>试试换个关键词，或点上方“热门场景”快速定位</span>
+    </div>`;
+    return;
+  }
+
+  const deptsToShow = currentDept ? DEPTS.filter(d => d.id === currentDept) : DEPTS;
+  deptsToShow.forEach(dept => {
+    const cases = hits.filter(c => c.dept === dept.id);
+    if (!cases.length) return;
+    const sec = h('section', 'dept-section');
+    sec.id = `dept-${dept.id}`;
+    sec.innerHTML = `<div class="dept-head"><h2>${dept.name}</h2><span class="en">${dept.en}</span><span class="desc">${dept.desc}</span></div>`;
+    const grid = h('div', 'case-grid');
+    cases.forEach((c, ci) => grid.appendChild(renderCard(c, dept, CARD_COLORS[ci % CARD_COLORS.length])));
+    sec.appendChild(grid);
+    box.appendChild(sec);
+  });
+}
+
+function renderCard(c, dept, colors) {
+  const card = h('article', `case-card ${c.status === 'wip' ? 'is-wip' : ''}`);
+  const statusLabel = c.status === 'live' ? '可演示' : c.status === 'demo' ? '有素材' : '待补充';
+  card.style.setProperty('--c1', colors[0]);
+  card.style.setProperty('--c2', colors[1]);
+  const faved = isFav(c.id);
+  card.innerHTML = `
+    <div class="card-media${c.cover ? ' has-cover' : ''}">
+      ${c.cover ? `<img class="cover-img" src="${c.cover}" alt="${c.title} 预览" loading="lazy">` : `<span class="watermark">${dept.en}</span>`}
+      <span class="status-pill ${c.status}"><i></i>${statusLabel}</span>
+      <button type="button" class="card-fav ${faved ? 'active' : ''}" aria-label="收藏案例" aria-pressed="${faved}">${svgIcon('bookmark', 18)}</button>
+    </div>
+    <div class="card-body">
+      <span class="card-dept">${dept.name}${c.client ? ` · ${c.client}` : ''}</span>
+      <h3>${c.title}</h3>
+      <p class="card-slogan">${c.slogan}</p>
+      <div class="card-badges">${c.tags.slice(0, 3).map(t => `<span>${t}</span>`).join('')}</div>
+      <div class="card-metrics">
+        ${c.metrics.slice(0, 3).map(m => `<div><strong>${m.value}</strong><small>${m.label}</small></div>`).join('')}
+      </div>
+    </div>
+    <div class="card-actions">
+      ${c.prompt ? `<button type="button" class="card-copy">${svgIcon('copy', 15)} 一键复制 Prompt</button>` : ''}
+      <a class="card-open" href="#/case/${c.id}">查看案例 ${svgIcon('arrowR', 15)}</a>
+    </div>
+    <a class="card-link" href="#/case/${c.id}" aria-label="查看「${c.title}」详情"></a>
+  `;
+
+  card.querySelector('.card-link').addEventListener('click', e => { e.preventDefault(); navigate('detail', c.id); });
+  card.querySelector('.card-open').addEventListener('click', e => { e.preventDefault(); navigate('detail', c.id); });
+
+  card.querySelector('.card-fav').addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    const on = toggleFav(c.id);
+    e.currentTarget.classList.toggle('active', on);
+    e.currentTarget.setAttribute('aria-pressed', on);
+    toast(on ? '已收藏案例' : '已取消收藏');
+  });
+
+  const copyBtn = card.querySelector('.card-copy');
+  if (copyBtn) copyBtn.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    copyText(c.prompt, copyBtn, `${svgIcon('copy', 15)} 一键复制 Prompt`);
+  });
+
+  return card;
+}
+
+/* ---------- Detail ---------- */
+function renderDetail() {
+  const c = currentCase;
+  if (!c) { navigate('gallery'); return; }
+  const dept = DEPTS.find(d => d.id === c.dept) || {};
+  const app = $('#app');
+  app.innerHTML = '';
+  const wrap = h('div', 'view detail-page');
+
+  /* Breadcrumb */
+  wrap.innerHTML = `
+    <nav class="breadcrumb">
+      <a href="#/" class="back-home">案例库</a>
+      <span class="sep">/</span>
+      <a href="#/" data-dept="${dept.id}">${dept.name}</a>
+      <span class="sep">/</span>
+      <strong>${c.title}</strong>
+    </nav>
+  `;
+  wrap.querySelector('.back-home').addEventListener('click', e => { e.preventDefault(); navigate('gallery'); });
+  const deptLink = wrap.querySelector('[data-dept]');
+  if (deptLink) deptLink.addEventListener('click', e => { e.preventDefault(); currentDept = dept.id; navigate('gallery'); });
+
+  /* Hero */
+  const faved = isFav(c.id);
+  const hero = h('section', 'detail-hero');
+  hero.innerHTML = `
+    <div class="detail-copy">
+      <div class="detail-chips">
+        <span class="chip-dept">${dept.name}</span>
+        ${c.client ? `<span class="chip-client">${c.client}</span>` : ''}
+      </div>
+      <h1>${c.title}</h1>
+      <p class="detail-slogan">${c.slogan}</p>
+      ${c.audience.length ? `<div class="detail-audience">${svgIcon('users', 16)}<span class="lbl">适用人群</span>${c.audience.map(a => `<b>${a}</b>`).join('')}</div>` : ''}
+      <div class="detail-actions">
+        ${c.prompt ? `<button type="button" class="btn primary copy-prompt">${svgIcon('copy', 16)} 一键复制 Prompt</button>` : ''}
+        <button type="button" class="btn share-case">${svgIcon('share', 16)} 分享案例</button>
+        <button type="button" class="btn fav-case ${faved ? 'active' : ''}" aria-pressed="${faved}">${svgIcon('bookmark', 16)} <span class="fav-label">${faved ? '已收藏' : '收藏案例'}</span></button>
+      </div>
+      <div class="roi-summary">
+        ${c.metrics.map((m, i) => `<div><span>亮点 0${i + 1}</span><strong>${m.value}</strong><small>${m.label}</small></div>`).join('')}
+      </div>
+    </div>
+    <figure class="detail-visual">
+      ${c.media ? (c.media.type === 'video'
+        ? `<video src="${c.media.src}" autoplay loop muted playsinline preload="metadata" poster="${c.media.poster || ''}"></video>`
+        : `<img src="${c.media.src}" alt="${c.title} 动态演示" loading="lazy">`)
+        : (c.cover
+          ? `<img src="${c.cover}" alt="${c.title} 效果预览" loading="lazy">`
+          : `<div class="visual-placeholder">${svgIcon('play', 46)}<span>演示动图即将上线</span></div>`)}
+      <figcaption class="preview-badge"><i></i>${c.media ? '动态实践预览' : '案例效果预览'}</figcaption>
+      <span class="preview-note">${c.media && c.media.caption ? c.media.caption : '真实操作片段 · 自动循环播放'}</span>
+    </figure>
+  `;
+  wrap.appendChild(hero);
+
+  /* Hero 按钮交互 */
+  const copyBtn = hero.querySelector('.copy-prompt');
+  if (copyBtn) copyBtn.addEventListener('click', () => copyText(c.prompt, copyBtn, `${svgIcon('copy', 16)} 一键复制 Prompt`));
+  hero.querySelector('.share-case').addEventListener('click', () => shareCase(c));
+  const favBtn = hero.querySelector('.fav-case');
+  favBtn.addEventListener('click', () => {
+    const on = toggleFav(c.id);
+    favBtn.classList.toggle('active', on);
+    favBtn.setAttribute('aria-pressed', on);
+    favBtn.querySelector('.fav-label').textContent = on ? '已收藏' : '收藏案例';
+    toast(on ? '已收藏案例' : '已取消收藏');
+  });
+
+  /* Tab 导航（锚点跳转 + 滚动高亮） */
+  const tabDefs = [
+    { id: 'overview', label: '案例概览', has: c.pains.length > 0 },
+    { id: 'compare',  label: '效果对比', has: !!(c.before && c.after) },
+    { id: 'demo',     label: '演示路径', has: c.demoLine.length > 0 },
+    { id: 'prompt',   label: '复制 Prompt', has: !!c.prompt },
+    { id: 'material', label: '相关材料', has: c.links.length > 0 }
+  ].filter(t => t.has);
+
+  if (tabDefs.length > 1) {
+    const tabs = h('nav', 'detail-tabs');
+    tabs.innerHTML = `<div class="tabs-inner">${tabDefs.map((t, i) => `<a href="#sec-${t.id}" data-tab="${t.id}" class="${i === 0 ? 'active' : ''}">${t.label}</a>`).join('')}</div>`;
+    tabs.querySelectorAll('[data-tab]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.getElementById(`sec-${a.dataset.tab}`);
+        if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 122, behavior: 'smooth' });
+      });
+    });
+    wrap.appendChild(tabs);
+  }
+
+  /* Section 01: 案例概览（场景挑战 & 解决思路） */
+  if (c.pains.length) {
+    const sec = h('section', 'detail-section overview');
+    sec.id = 'sec-overview';
+    sec.innerHTML = `
+      <span class="section-label">01 / 案例概览</span>
+      <p class="section-lead">${c.summary}</p>
+      <div class="overview-grid">
+        <article class="pain-card">
+          <div class="article-icon pain">${svgIcon('pain', 20)}</div>
+          <span>典型挑战</span>
+          <h3>这些问题你是不是也在面对</h3>
+          <ul>${c.pains.map(p => `<li>${svgIcon('alertTri', 16)}${p}</li>`).join('')}</ul>
+        </article>
+        <article class="sol-card">
+          <div class="article-icon solution">${svgIcon('check', 20)}</div>
+          <span>解决思路</span>
+          <h3>千问办公的做法</h3>
+          <ul>${c.solutions.map(s => `<li>${svgIcon('check', 16)}${s}</li>`).join('')}</ul>
+        </article>
+      </div>
+    `;
+    wrap.appendChild(sec);
+  }
+
+  /* Section 02: 效果对比 */
+  if (c.before && c.after) {
+    const sec = h('section', 'detail-section');
+    sec.id = 'sec-compare';
+    sec.innerHTML = `
+      <span class="section-label">02 / 效果对比</span>
+      <div class="compare-grid">
+        <figure class="before"><figcaption><span class="before-dot">以前</span></figcaption><p>${c.before}</p></figure>
+        <figure class="after"><figcaption><span class="after-dot">现在</span></figcaption><p>${c.after}</p></figure>
+      </div>
+    `;
+    wrap.appendChild(sec);
+  }
+
+  /* Section 03: 演示路径 */
+  if (c.demoLine.length) {
+    const sec = h('section', 'detail-section');
+    sec.id = 'sec-demo';
+    sec.innerHTML = `
+      <span class="section-label">03 / 演示路径</span>
+      <h2>怎么用？</h2>
+      <ul class="demo-line">${c.demoLine.map(d => `<li>${d}</li>`).join('')}</ul>
+    `;
+    wrap.appendChild(sec);
+  }
+
+  /* Section 04: 复制 Prompt */
+  if (c.prompt) {
+    const sec = h('section', 'detail-section');
+    sec.id = 'sec-prompt';
+    sec.innerHTML = `
+      <span class="section-label">04 / 复制 PROMPT</span>
+      <div class="prompt-box">
+        <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制</button></div>
+        <pre>${c.prompt}</pre>
+      </div>
+    `;
+    wrap.appendChild(sec);
+    const btn2 = sec.querySelector('.copy-prompt-2');
+    btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制`));
+  }
+
+  /* Section 05: 相关材料 */
+  if (c.links.length) {
+    const sec = h('section', 'detail-section');
+    sec.id = 'sec-material';
+    const kindIcon = { demo: 'live', doc: 'doc', file: 'download', live: 'live' };
+    sec.innerHTML = `
+      <span class="section-label">05 / 相关材料</span>
+      <div class="links-grid">
+        ${c.links.map((l, i) => `
+          <a class="link-card" href="${l.href}" data-link-idx="${i}">
+            <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
+            <span class="tx"><b>${l.label}</b><small>${l.kind === 'live' ? '在线体验' : l.kind === 'demo' ? '查看演示' : l.kind === 'file' ? '下载资料' : '查看文档'}</small></span>
+            <span class="arrow">${svgIcon('arrowR', 16)}</span>
+          </a>
+        `).join('')}
+      </div>
+    `;
+    wrap.appendChild(sec);
+    sec.querySelectorAll('.link-card').forEach(a => {
+      a.addEventListener('click', e => {
+        const link = c.links[+a.dataset.linkIdx];
+        if (openInModal(link)) e.preventDefault();
+      });
+    });
+  }
+
+  /* WIP Notice */
+  if (c.status === 'wip') {
+    const sec = h('section', 'detail-section');
+    sec.innerHTML = `<div class="wip-notice">${svgIcon('alertTri', 18)}<div><strong>该案例正在完善中</strong><br>内容框架已就绪，演示素材即将更新。如果您对这个场景感兴趣，欢迎联系我们提前了解。</div></div>`;
+    wrap.appendChild(sec);
+  }
+
+  /* Related cases */
+  const related = CASES.filter(r => r.dept === c.dept && r.id !== c.id).slice(0, 3);
+  if (related.length) {
+    const sec = h('section', 'detail-section');
+    sec.innerHTML = `<span class="section-label">相关案例</span>`;
+    const grid = h('div', 'related-grid');
+    related.forEach((r, ri) => {
+      const rd = DEPTS.find(d => d.id === r.dept) || {};
+      grid.appendChild(renderCard(r, rd, CARD_COLORS[ri % CARD_COLORS.length]));
+    });
+    sec.appendChild(grid);
+    wrap.appendChild(sec);
+  }
+
+  app.appendChild(wrap);
+}
+
+/* ---------- Nav ---------- */
+function renderNav() {
+  const nav = $('#mainNav');
+  nav.innerHTML = '';
+  DEPTS.forEach(d => {
+    const cnt = CASES.filter(c => c.dept === d.id).length;
+    if (!cnt) return;
+    const a = h('a', '', d.name);
+    a.href = `#dept-${d.id}`;
+    a.addEventListener('click', e => { e.preventDefault(); currentDept = d.id; navigate('gallery'); setTimeout(() => { const el = $(`#dept-${d.id}`); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 60); });
+    nav.appendChild(a);
+  });
+}
+
+/* ---------- Render ---------- */
+function render() {
+  if (currentView === 'detail') renderDetail();
+  else renderGallery();
+  setupScrollSpy();
+}
+
+/* Tab 滚动高亮：以当前视口上缘为基准选中最后一个已过的 section */
+let spyHandler = null;
+function setupScrollSpy() {
+  if (spyHandler) { window.removeEventListener('scroll', spyHandler); spyHandler = null; }
+  const tabs = $$('.detail-tabs [data-tab]');
+  if (!tabs.length) return;
+  const secs = tabs.map(t => document.getElementById(`sec-${t.dataset.tab}`)).filter(Boolean);
+  spyHandler = () => {
+    const line = window.scrollY + 160;
+    let idx = 0;
+    secs.forEach((s, i) => { if (s.offsetTop <= line) idx = i; });
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+  };
+  window.addEventListener('scroll', spyHandler, { passive: true });
+  spyHandler();
+}
+
+/* ---------- Modal preview ---------- */
+/*
+ * kind 行为对照：
+ *   demo / doc → 弹窗内预览（iframe）+ 下载按钮
+ *   file       → 直接下载，不开预览（如 zip）
+ *   live       → 新标签页打开（外部站点不允许 iframe 嵌入）
+ */
+function isPreviewable(link) {
+  if (!link) return false;
+  if (link.kind === 'demo' || link.kind === 'doc') return true;
+  return false;
+}
+function renderLinkButton(link, extraClass = '') {
+  const iconName = link.kind === 'demo' ? 'live' : link.kind === 'file' ? 'download' : link.kind === 'live' ? 'live' : 'doc';
+  if (link.kind === 'live') {
+    return `<a class="btn ${extraClass}" href="${link.href}" target="_blank" rel="noopener">${svgIcon(iconName, 16)} ${link.label}</a>`;
+  }
+  if (link.kind === 'file') {
+    return `<a class="btn ${extraClass}" href="${link.href}" download>${svgIcon('download', 16)} ${link.label}</a>`;
+  }
+  return `<button type="button" class="btn ${extraClass}" data-preview-href="${link.href}" data-preview-label="${link.label}" data-preview-kind="${link.kind}">${svgIcon(iconName, 16)} ${link.label}</button>`;
+}
+function openInModal(link) {
+  if (!isPreviewable(link)) {
+    if (link.kind === 'file') {
+      const a = document.createElement('a');
+      a.href = link.href; a.download = ''; document.body.appendChild(a); a.click(); a.remove();
+      return true;
+    }
+    return false; /* live → 默认跳转 */
+  }
+  const backdrop = $('#previewModal');
+  const frame = $('#previewFrame');
+  const title = $('#previewTitle');
+  const dl = $('#previewDownload');
+  title.textContent = link.label;
+  dl.href = link.href;
+  dl.setAttribute('download', '');
+  /* SVG 直接作为 iframe 也能展示 */
+  frame.src = link.href;
+  backdrop.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  return true;
+}
+function closeModal() {
+  const backdrop = $('#previewModal');
+  const frame = $('#previewFrame');
+  backdrop.classList.remove('show');
+  frame.src = 'about:blank';
+  document.body.style.overflow = '';
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-preview-href]');
+  if (btn) {
+    e.preventDefault();
+    openInModal({ href: btn.dataset.previewHref, label: btn.dataset.previewLabel, kind: btn.dataset.previewKind });
+  }
+  if (e.target.matches('#previewModal') || e.target.closest('#previewClose')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---------- Scroll ---------- */
+const toTop = $('#toTop');
+window.addEventListener('scroll', () => { toTop.classList.toggle('show', window.scrollY > 400); }, { passive: true });
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ---------- Boot ---------- */
+initFromHash();
+renderNav();
+render();
+</script>
+</body>
+</html>
