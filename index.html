@@ -548,7 +548,6 @@ function renderDetail() {
     <div class="detail-copy">
       <div class="detail-chips">
         <span class="chip-dept">${dept.name}</span>
-        ${c.client ? `<span class="chip-client">${c.client}</span>` : ''}
       </div>
       <h1>${c.title}</h1>
       <p class="detail-slogan">${c.slogan}</p>
@@ -592,7 +591,8 @@ function renderDetail() {
   const tabDefs = [
     { id: 'overview', label: '案例概览', has: c.pains.length > 0 },
     { id: 'compare',  label: '效果对比', has: !!(c.before && c.after) },
-    { id: 'demo',     label: '演示路径', has: c.demoLine.length > 0 },
+    /* 有视频就叫「视频演示」，没视频才叫「演示路径」 */
+    { id: 'demo',     label: c.video ? '视频演示' : '演示路径', has: !!c.video || c.demoLine.length > 0 },
     { id: 'prompt',   label: '复制 Prompt', has: !!c.prompt },
     { id: 'material', label: '相关材料', has: c.links.length > 0 }
   ].filter(t => t.has);
@@ -649,32 +649,51 @@ function renderDetail() {
     wrap.appendChild(sec);
   }
 
-  /* Section 03: 演示路径 */
-  if (c.demoLine.length) {
+  /* Section 03: 视频演示 / 演示路径 */
+  if (c.video || c.demoLine.length) {
     const sec = h('section', 'detail-section');
     sec.id = 'sec-demo';
+    const label = c.video ? '03 / 视频演示' : '03 / 演示路径';
     sec.innerHTML = `
-      <span class="section-label">03 / 演示路径</span>
-      <h2>怎么用？</h2>
-      <ul class="demo-line">${c.demoLine.map(d => `<li>${d}</li>`).join('')}</ul>
+      <span class="section-label">${label}</span>
+      <h2>${c.video ? '完整操作看这里' : '怎么用？'}</h2>
+      ${c.video ? `
+        <figure class="video-block">
+          <video src="${c.video.src}" poster="${c.video.poster || ''}" controls playsinline preload="metadata"></video>
+          ${c.video.caption ? `<figcaption>${c.video.caption}</figcaption>` : ''}
+        </figure>` : ''}
+      ${c.demoLine.length ? `<ul class="demo-line${c.video ? ' after-video' : ''}">${c.demoLine.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}
     `;
     wrap.appendChild(sec);
   }
 
-  /* Section 04: 复制 Prompt */
+  /* Section 04: 复制 Prompt（有 promptSections 就分栏展示，避免一大坨文字） */
   if (c.prompt) {
     const sec = h('section', 'detail-section');
     sec.id = 'sec-prompt';
+    const structured = Array.isArray(c.promptSections) && c.promptSections.length;
     sec.innerHTML = `
       <span class="section-label">04 / 复制 PROMPT</span>
       <div class="prompt-box">
-        <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制</button></div>
-        <pre>${c.prompt}</pre>
+        <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制全文</button></div>
+        ${structured ? `
+          <div class="prompt-struct">
+            ${c.promptLead ? `<p class="prompt-lead">${c.promptLead}</p>` : ''}
+            <div class="prompt-cols">
+              ${c.promptSections.map(s => `
+                <section>
+                  <h4>${s.title}</h4>
+                  <ul>${s.items.map(i => `<li>${i}</li>`).join('')}</ul>
+                </section>
+              `).join('')}
+            </div>
+            ${c.promptTail ? `<p class="prompt-tail">${c.promptTail}</p>` : ''}
+          </div>` : `<pre>${c.prompt}</pre>`}
       </div>
     `;
     wrap.appendChild(sec);
     const btn2 = sec.querySelector('.copy-prompt-2');
-    btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制`));
+    btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制全文`));
   }
 
   /* Section 05: 相关材料 */

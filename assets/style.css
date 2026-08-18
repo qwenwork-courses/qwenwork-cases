@@ -700,6 +700,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
   gap: 0;
+  align-items: stretch;
   border: 1px solid var(--line);
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -709,61 +710,56 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ---- Hero 左栏 ---- */
 .detail-copy {
-  padding: 46px 44px 40px;
+  padding: 34px 40px 32px;
   display: flex;
   flex-direction: column;
 }
 
-.detail-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.detail-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .detail-chips span {
-  padding: 6px 13px;
+  padding: 5px 12px;
   border-radius: var(--r-sm);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
 }
 .detail-chips .chip-dept { background: var(--accent); color: #fff; }
-.detail-chips .chip-client {
-  background: var(--accent-soft);
-  color: var(--accent-dark);
-  border: 1px solid var(--accent-line);
-}
 
 .detail-copy h1 {
-  margin: 0 0 14px;
-  font-size: clamp(30px, 3.2vw, 44px);
-  line-height: 1.14;
-  letter-spacing: -0.042em;
+  margin: 0 0 10px;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
   font-weight: 700;
 }
 .detail-slogan {
-  margin: 0 0 22px;
+  margin: 0 0 16px;
   color: var(--muted);
-  font-size: 15.5px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .detail-audience {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
   color: var(--subtle);
 }
-.detail-audience > svg { flex: none; }
-.detail-audience .lbl { font-size: 13px; margin-right: 2px; }
+.detail-audience > svg { flex: none; width: 15px; height: 15px; }
+.detail-audience .lbl { font-size: 12.5px; margin-right: 2px; }
 .detail-audience b {
-  padding: 5px 12px;
+  padding: 4px 11px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
   background: var(--surface);
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
 }
 
-.detail-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.detail-actions { display: flex; gap: 9px; flex-wrap: wrap; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -800,50 +796,49 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  margin-top: 38px;
-  padding-top: 28px;
+  margin-top: 26px;
+  padding-top: 20px;
   border-top: 1px solid var(--line);
 }
-.roi-summary > div { padding-right: 20px; }
+.roi-summary > div { padding-right: 16px; }
 .roi-summary > div + div {
-  padding-left: 22px;
+  padding-left: 18px;
   border-left: 1px solid var(--line);
 }
 .roi-summary span {
   display: block;
   color: var(--accent-3);
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 .roi-summary strong {
   display: block;
-  margin: 8px 0 6px;
+  margin: 6px 0 4px;
   color: var(--accent-dark);
-  font-size: 27px;
-  line-height: 1.12;
-  letter-spacing: -0.042em;
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums;
 }
 .roi-summary small {
   display: block;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 1.55;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
-/* ---- Hero 右栏：演示动图 ---- */
+/* ---- Hero 右栏：演示动图 / 图片（保素材原比例，不裁切）---- */
 .detail-visual {
   position: relative;
   margin: 0;
-  padding: 22px;
+  padding: 20px;
   border-left: 1px solid var(--line);
   background: linear-gradient(160deg, var(--bg-tint), var(--surface-2));
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 420px;
 }
 .detail-visual::before {
   content: '';
@@ -856,10 +851,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .detail-visual > img {
   position: relative;
   width: 100%;
-  height: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  height: auto;
+  object-fit: contain;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   background: #fff;
@@ -975,6 +968,86 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: var(--muted);
   font-size: 15px;
   line-height: 1.8;
+}
+
+/* 视频演示区块 */
+.video-block {
+  margin: 0 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow-md);
+}
+.video-block video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+  background: #000;
+}
+.video-block figcaption {
+  padding: 11px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.demo-line.after-video { margin-top: 22px; }
+
+/* 分栏 Prompt */
+.prompt-struct { padding: 22px 24px; }
+.prompt-lead {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.7;
+  font-weight: 550;
+}
+.prompt-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 26px;
+}
+.prompt-cols section {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.prompt-cols h4 {
+  margin: 0 0 10px;
+  color: var(--accent-dark);
+  font-size: 13.5px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.prompt-cols ul { display: flex; flex-direction: column; gap: 8px; }
+.prompt-cols li {
+  position: relative;
+  padding-left: 15px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.prompt-cols li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-3);
+}
+.prompt-tail {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 550;
 }
 
 /* ---------------------------------------------------------- 详情内容段 --- */
@@ -1604,6 +1677,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .tabs-inner a { padding: 13px 14px; font-size: 13px; }
   .tabs-inner a::after { left: 14px; right: 14px; }
   .section-lead { font-size: 14px; }
+  .prompt-cols { grid-template-columns: minmax(0, 1fr); }
 
   /* 页脚：按钮与二维码改为纵向堆叠 */
   .footer-contact { flex-direction: column; align-items: flex-start; gap: 20px; }
