@@ -60,6 +60,48 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
+<!-- ===================================================== 分享案例弹窗 === -->
+<div class="modal-backdrop share-modal" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+  <div class="share-panel" role="document">
+    <div class="share-head">
+      <span class="share-title" id="shareTitle">分享案例</span>
+      <button type="button" class="form-close" id="shareClose" aria-label="关闭">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="share-tabs" role="tablist">
+      <button type="button" class="share-tab active" data-pane="link" role="tab">链接分享</button>
+      <button type="button" class="share-tab" data-pane="poster" role="tab">分享海报</button>
+    </div>
+
+    <div class="share-pane active" id="pane-link">
+      <p class="share-hint">复制链接发给客户，对方打开即直达本案例。</p>
+      <div class="share-url">
+        <input type="text" id="shareUrl" readonly aria-label="案例链接">
+        <button type="button" class="btn primary" id="shareCopy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
+          复制链接
+        </button>
+      </div>
+    </div>
+
+    <div class="share-pane" id="pane-poster">
+      <p class="share-hint">海报带案例二维码，适合发群或打印。</p>
+      <div class="poster-stage">
+        <div class="poster-loading" id="posterLoading">正在生成海报…</div>
+        <canvas id="posterCanvas"></canvas>
+      </div>
+      <div class="share-actions">
+        <a class="btn primary" id="posterSave" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+          保存海报
+        </a>
+        <span class="share-tip">也可右键 / 长按图片直接保存</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ========================================================= 预览弹窗 === -->
 <div class="modal-backdrop" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
   <div class="modal-panel" role="document">
@@ -82,6 +124,8 @@
 
 <!-- ============================================================== Data === -->
 <script src="assets/data.js"></script>
+<script src="assets/qr.js"></script>
+<script src="assets/poster.js"></script>
 
 <!-- ============================================================== App ==== -->
 <script>
@@ -128,6 +172,7 @@ const CARD_COLORS = [
 /* ---------- State ---------- */
 let currentDept = null;      // null = 全部
 let searchQuery = '';        // 搜索关键词
+let favOnly = false;         // 只看我的收藏
 let currentView = 'gallery'; // 'gallery' | 'detail'
 let currentCase = null;
 
@@ -182,13 +227,18 @@ function copyText(text, btn, restoreHTML) {
   }).catch(() => toast('复制失败，请手动选中文本'));
 }
 
+/* 案例链接：以当前页面地址为基准，只换 hash。
+   不能写死域名——本地预览 / 内网 / GitHub Pages 域名各不相同，
+   写死会导致复制出来的链接不是当前网址。search 参数丢掉保持链接干净。*/
+function caseUrl(id) {
+  const u = new URL(location.href);
+  u.search = '';
+  u.hash = `#/case/${id}`;
+  return u.href;
+}
+
 function shareCase(c) {
-  const url = `${location.origin}${location.pathname}#/case/${c.id}`;
-  if (navigator.share) {
-    navigator.share({ title: `${c.title} ・ 千问办公案例库`, text: c.slogan, url }).catch(() => {});
-    return;
-  }
-  writeClipboard(url).then(() => toast('案例链接已复制')).catch(() => toast('分享失败'));
+  openShareModal(c);
 }
 
 /* ---------- Routing ---------- */
@@ -216,6 +266,19 @@ window.addEventListener('popstate', (e) => {
     currentCase = null;
   }
   render();
+});
+
+/* 手改 hash / 外部跳转（如客户点开分享链接而页面已开着）时同步视图。
+   pushState 不触发 hashchange，所以与 navigate() 不会重复渲染。*/
+window.addEventListener('hashchange', () => {
+  const m = location.hash.match(/^#\/case\/(.+)$/);
+  const nextCase = m ? (CASES.find(c => c.id === m[1]) || null) : null;
+  const nextView = nextCase ? 'detail' : 'gallery';
+  if (nextView === currentView && nextCase === currentCase) return;
+  currentView = nextView;
+  currentCase = nextCase;
+  render();
+  window.scrollTo({ top: 0 });
 });
 
 /* ---------- Init ---------- */
@@ -312,22 +375,35 @@ function syncHotChips() {
   $$('.hot-chip').forEach(c => c.classList.toggle('active', c.dataset.scene === searchQuery));
 }
 
-/* 部门筛选胶囊：计数随当前搜索词变化 */
+/* 部门筛选胶囊 + 「我的收藏」：计数随当前搜索词变化 */
 function renderDeptFilter() {
   const box = $('#deptFilter');
   if (!box) return;
   const hits = CASES.filter(c => matchCase(c, searchQuery));
   box.innerHTML = '';
-  const allBtn = h('button', `dept-chip ${currentDept === null ? 'active' : ''}`, `全部 <span class="count">${hits.length}</span>`);
-  allBtn.onclick = () => { currentDept = null; renderDeptFilter(); renderResults(); };
+
+  const allBtn = h('button', `dept-chip ${(currentDept === null && !favOnly) ? 'active' : ''}`, `全部 <span class="count">${hits.length}</span>`);
+  allBtn.onclick = () => { currentDept = null; favOnly = false; renderDeptFilter(); renderResults(); };
   box.appendChild(allBtn);
+
   DEPTS.forEach(d => {
     const cnt = hits.filter(c => c.dept === d.id).length;
     if (!cnt) return;
-    const btn = h('button', `dept-chip ${currentDept === d.id ? 'active' : ''}`, `${d.name} <span class="count">${cnt}</span>`);
-    btn.onclick = () => { currentDept = d.id; renderDeptFilter(); renderResults(); };
+    const btn = h('button', `dept-chip ${(currentDept === d.id && !favOnly) ? 'active' : ''}`, `${d.name} <span class="count">${cnt}</span>`);
+    btn.onclick = () => { currentDept = d.id; favOnly = false; renderDeptFilter(); renderResults(); };
     box.appendChild(btn);
   });
+
+  /* 收藏胶囊放在最后，用书签图标与部门筛选区分开 */
+  const favCount = hits.filter(c => isFav(c.id)).length;
+  const favBtn = h('button', `dept-chip fav-chip ${favOnly ? 'active' : ''}`,
+    `${svgIcon('bookmark', 14)} 我的收藏 <span class="count">${favCount}</span>`);
+  favBtn.onclick = () => {
+    favOnly = !favOnly;
+    if (favOnly) currentDept = null;   /* 收藏视图不限部门 */
+    renderDeptFilter(); renderResults();
+  };
+  box.appendChild(favBtn);
 }
 
 /* 全文匹配：标题/slogan/概述/标签/痛点/方案/人群/部门名/客户均参与，多词需全部命中。
@@ -352,19 +428,28 @@ function renderResults() {
   if (!box) return;
   box.innerHTML = '';
 
-  const hits = CASES.filter(c => matchCase(c, searchQuery) && (currentDept ? c.dept === currentDept : true));
+  const hits = CASES.filter(c =>
+    matchCase(c, searchQuery)
+    && (currentDept ? c.dept === currentDept : true)
+    && (favOnly ? isFav(c.id) : true)
+  );
   const countEl = $('#resultsCount');
   if (countEl) {
-    countEl.textContent = searchQuery
-      ? `匹配到 ${hits.length} 个案例`
-      : `${hits.length} 个案例`;
+    countEl.textContent = favOnly ? `已收藏 ${hits.length} 个案例`
+      : searchQuery ? `匹配到 ${hits.length} 个案例`
+        : `${hits.length} 个案例`;
   }
 
   if (!hits.length) {
-    box.innerHTML = `<div class="empty-state">
-      <strong>没找到匹配“${searchQuery}”的案例</strong>
-      <span>试试换个关键词，或点上方“热门场景”快速定位</span>
-    </div>`;
+    box.innerHTML = favOnly
+      ? `<div class="empty-state">
+           <strong>还没有收藏任何案例</strong>
+           <span>点卡片右上角的书签图标，把常用案例收起来，下次直接从这里拿</span>
+         </div>`
+      : `<div class="empty-state">
+           <strong>没找到匹配“${searchQuery}”的案例</strong>
+           <span>试试换个关键词，或点上方“热门场景”快速定位</span>
+         </div>`;
     return;
   }
 
@@ -419,6 +504,9 @@ function renderCard(c, dept, colors) {
     e.currentTarget.classList.toggle('active', on);
     e.currentTarget.setAttribute('aria-pressed', on);
     toast(on ? '已收藏案例' : '已取消收藏');
+    /* 收藏数变了，刷新胶囊计数；若正在收藏视图，取消后该卡需移出 */
+    if ($('#deptFilter')) renderDeptFilter();
+    if (favOnly) renderResults();
   });
 
   const copyBtn = card.querySelector('.card-copy');
@@ -736,7 +824,92 @@ document.addEventListener('click', e => {
   }
   if (e.target.matches('#previewModal') || e.target.closest('#previewClose')) closeModal();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeModal();
+  closeShareModal();
+});
+
+/* ---------- 分享案例弹窗（链接 / 海报）---------- */
+let posterCase = null;
+let posterDone = false;      /* 同一案例只渲染一次 */
+
+function openShareModal(c) {
+  posterCase = c;
+  posterDone = false;
+  const url = caseUrl(c.id);
+  $('#shareUrl').value = url;                     /* 把链接明文展出来，所见即所复制 */
+  $('#shareTitle').textContent = `分享「${c.title}」`;
+  switchSharePane('link');
+  $('#shareModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeShareModal() {
+  $('#shareModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function switchSharePane(name) {
+  $$('.share-tab').forEach(t => t.classList.toggle('active', t.dataset.pane === name));
+  $$('.share-pane').forEach(p => p.classList.toggle('active', p.id === `pane-${name}`));
+  if (name === 'poster') buildPoster();
+}
+
+function buildPoster() {
+  if (!posterCase || posterDone) return;
+  posterDone = true;
+  const c = posterCase;
+  const dept = DEPTS.find(d => d.id === c.dept) || {};
+  const canvas = $('#posterCanvas');
+  const loading = $('#posterLoading');
+  loading.style.display = 'block';
+  loading.textContent = '正在生成海报…';
+
+  Poster.render(canvas, {
+    title: c.title,
+    slogan: c.slogan,
+    deptName: dept.name,
+    client: c.client,
+    metrics: c.metrics,
+    cover: c.cover,
+    url: caseUrl(c.id),
+    logoSrc: $('.brand-logo') ? $('.brand-logo').src : '',
+    brand: SITE.brand,
+    tagline: SITE.slogan
+  }).then(() => {
+    loading.style.display = 'none';
+    /* toBlob 比 toDataURL 省内存，大图不卡 */
+    canvas.toBlob(blob => {
+      if (!blob) return;
+      const a = $('#posterSave');
+      if (a.dataset.url) URL.revokeObjectURL(a.dataset.url);
+      const objUrl = URL.createObjectURL(blob);
+      a.href = objUrl;
+      a.dataset.url = objUrl;
+      a.download = `千问办公案例_${c.title}.png`;
+    }, 'image/png');
+  }).catch(err => {
+    posterDone = false;
+    loading.textContent = '海报生成失败，请重试';
+    console.error('poster:', err);
+  });
+}
+
+$('#shareClose').addEventListener('click', closeShareModal);
+$('#shareModal').addEventListener('click', e => { if (e.target.id === 'shareModal') closeShareModal(); });
+$$('.share-tab').forEach(t => t.addEventListener('click', () => switchSharePane(t.dataset.pane)));
+$('#shareCopy').addEventListener('click', () => {
+  const btn = $('#shareCopy');
+  const label = btn.innerHTML;
+  const input = $('#shareUrl');
+  input.select();
+  writeClipboard(input.value).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `${svgIcon('check', 16)} 已复制`;
+    toast('案例链接已复制');
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = label; }, 2000);
+  }).catch(() => toast('复制失败，请手动选中链接'));
+});
 
 /* ---------- 顶部「预约演示」与页脚联系区 ---------- */
 /* 预约演示：平滑滚到页脚联系区。用 JS 滚而不靠 href 改 hash，
