@@ -916,13 +916,15 @@ function renderDetail() {
       <div class="links-grid">
         ${items.map(({ l, i, g }) => `
           <a class="link-card" href="${l.href}" data-link-id="${i}">
-            <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
-            <span class="tx">
-              <span class="link-group-tag g-${g}">${GROUP_NAME[g]}</span>
-              <b>${l.label}</b>
-              <small>${l.note || kindNote[l.kind] || '查看文档'}</small>
+            <span class="link-group-tag g-${g}">${GROUP_NAME[g]}</span>
+            <span class="link-card-main">
+              <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
+              <span class="tx">
+                <b>${l.label}</b>
+                <small>${l.note || kindNote[l.kind] || '查看文档'}</small>
+              </span>
+              <span class="arrow">${svgIcon(l.kind === 'file' ? 'download' : 'arrowR', 16)}</span>
             </span>
-            <span class="arrow">${svgIcon(l.kind === 'file' ? 'download' : 'arrowR', 16)}</span>
           </a>
         `).join('')}
       </div>
