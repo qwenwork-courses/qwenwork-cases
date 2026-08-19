@@ -4,6 +4,7 @@ CASES.push(
   "id": "course-creation",
   "dept": "training",
   "path": "skill",
+  "skill": "course-creation-workflow",
   "status": "live",
   "title": "从零制课：课程视频流水线",
   "slogan": "给一份文字稿，产出带字幕的 1080p 成片",
@@ -55,11 +56,13 @@ CASES.push(
   ],
   "links": [
     {
+      "group": "skill",
       "label": "查看 SOP 流程图",
       "href": "demos/course-creation/course-sop-flow.svg",
       "kind": "doc"
     },
     {
+      "group": "skill",
       "label": "下载技能包（15MB）",
       "href": "demos/course-creation/course-creation-kit.zip",
       "kind": "file"

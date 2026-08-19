@@ -56,9 +56,27 @@ CASES.push(
   ],
   "links": [
     {
-      "label": "查看技能定义（SKILL.md）",
+      "group": "skill",
+      "label": "合同审查技能包",
       "href": "demos/contract-review/contract-review-skill.md",
-      "kind": "doc"
+      "kind": "text",
+      "download": "demos/contract-review/contract-review-skill-kit.zip",
+      "downloadName": "contract-review-skill-kit.zip",
+      "note": "点开看技能定义，右上角下载包含 SKILL.md + 输出模板 template.html"
+    },
+    {
+      "group": "sample",
+      "label": "云枢平台采购合同.docx",
+      "href": "demos/contract-review/云枢平台采购合同.docx",
+      "kind": "file",
+      "note": "示例合同，下载后可直接丢给 agent 试跑"
+    },
+    {
+      "group": "output",
+      "label": "交互式审查工作台",
+      "href": "demos/contract-review/合同审查_星海制造_云枢平台采购_交互式.html",
+      "kind": "demo",
+      "note": "星海制造 · 云枢平台采购合同的实际审查产物"
     }
   ],
   "media": {

@@ -139,6 +139,7 @@
       </div>
     </div>
     <iframe class="modal-frame" id="previewFrame" src="about:blank" title="预览"></iframe>
+    <pre class="modal-text" id="previewText" hidden></pre>
   </div>
 </div>
 
@@ -896,27 +897,44 @@ function renderDetail() {
     btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制全文`));
   }
 
-  /* Section 05: 相关材料 */
+  /* Section 05: 相关材料——固定分三块：技能包 / 示例文档 / 产物。
+     没标 group 的旧链接归到「产物」（现有链接绝大多数是在线看板/报告）*/
   if (c.links.length) {
     const sec = h('section', 'detail-section');
     sec.id = 'sec-material';
-    const kindIcon = { demo: 'live', doc: 'doc', file: 'download', live: 'live' };
+    const kindIcon = { demo: 'live', doc: 'doc', text: 'doc', file: 'download', live: 'live' };
+    const kindNote = { live: '在线体验', demo: '查看演示', doc: '查看文档', text: '点开预览 · 可下载', file: '下载资料' };
+    const GROUPS = [
+      { id: 'skill',  name: '技能包',   desc: '拿这个去复用同一套审查 / 生产标准' },
+      { id: 'sample', name: '示例文档', desc: '下载后直接丢给 agent，能复现同样的输出' },
+      { id: 'output', name: '产物',     desc: '真实交付结果，可在线看也可下载' }
+    ];
+    const grouped = GROUPS.map(g => ({
+      ...g,
+      items: c.links.filter(l => (l.group || 'output') === g.id)
+    })).filter(g => g.items.length);
+
     sec.innerHTML = `
       <span class="section-label">05 / 相关材料</span>
-      <div class="links-grid">
-        ${c.links.map((l, i) => `
-          <a class="link-card" href="${l.href}" data-link-idx="${i}">
-            <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
-            <span class="tx"><b>${l.label}</b><small>${l.kind === 'live' ? '在线体验' : l.kind === 'demo' ? '查看演示' : l.kind === 'file' ? '下载资料' : '查看文档'}</small></span>
-            <span class="arrow">${svgIcon('arrowR', 16)}</span>
-          </a>
-        `).join('')}
-      </div>
+      ${grouped.map(g => `
+        <div class="material-group">
+          <div class="material-group-head"><b>${g.name}</b><span>${g.desc}</span></div>
+          <div class="links-grid">
+            ${g.items.map(l => `
+              <a class="link-card" href="${l.href}" data-link-id="${c.links.indexOf(l)}">
+                <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
+                <span class="tx"><b>${l.label}</b><small>${l.note || kindNote[l.kind] || '查看文档'}</small></span>
+                <span class="arrow">${svgIcon(l.kind === 'file' ? 'download' : 'arrowR', 16)}</span>
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
     `;
     wrap.appendChild(sec);
     sec.querySelectorAll('.link-card').forEach(a => {
       a.addEventListener('click', e => {
-        const link = c.links[+a.dataset.linkIdx];
+        const link = c.links[+a.dataset.linkId];
         if (openInModal(link)) e.preventDefault();
       });
     });
@@ -993,7 +1011,7 @@ function setupScrollSpy() {
  */
 function isPreviewable(link) {
   if (!link) return false;
-  if (link.kind === 'demo' || link.kind === 'doc') return true;
+  if (link.kind === 'demo' || link.kind === 'doc' || link.kind === 'text') return true;
   return false;
 }
 function renderLinkButton(link, extraClass = '') {
@@ -1010,20 +1028,39 @@ function openInModal(link) {
   if (!isPreviewable(link)) {
     if (link.kind === 'file') {
       const a = document.createElement('a');
-      a.href = link.href; a.download = ''; document.body.appendChild(a); a.click(); a.remove();
+      a.href = link.href; a.download = link.downloadName || ''; document.body.appendChild(a); a.click(); a.remove();
       return true;
     }
     return false; /* live → 默认跳转 */
   }
   const backdrop = $('#previewModal');
   const frame = $('#previewFrame');
+  const textBox = $('#previewText');
   const title = $('#previewTitle');
   const dl = $('#previewDownload');
   title.textContent = link.label;
-  dl.href = link.href;
-  dl.setAttribute('download', '');
-  /* SVG 直接作为 iframe 也能展示 */
-  frame.src = link.href;
+  /* 下载按钮可以指向与预览不同的文件：
+     技能包就是“预览 SKILL.md、下载整个 zip”这种组合 */
+  dl.href = link.download || link.href;
+  dl.setAttribute('download', link.downloadName || '');
+
+  if (link.kind === 'text') {
+    /* .md 的 content-type 是 text/markdown，丢给 iframe 会直接触发下载而不是展示，
+       所以自己 fetch 文本放进 <pre>（textContent 赋值，不会执行任何内容）*/
+    frame.hidden = true;
+    frame.src = 'about:blank';
+    textBox.hidden = false;
+    textBox.textContent = '加载中…';
+    fetch(link.href)
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(t => { textBox.textContent = t; textBox.scrollTop = 0; })
+      .catch(err => { textBox.textContent = `文件读取失败（${err.message}）\n可直接点右上角“下载”拿完整包。`; });
+  } else {
+    textBox.hidden = true;
+    textBox.textContent = '';
+    frame.hidden = false;
+    frame.src = link.href;   /* SVG / HTML 直接作为 iframe 就能展示 */
+  }
   backdrop.classList.add('show');
   document.body.style.overflow = 'hidden';
   return true;

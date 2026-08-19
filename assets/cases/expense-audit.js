@@ -4,6 +4,7 @@ CASES.push(
   "id": "expense-audit",
   "dept": "finance",
   "path": "skill",
+  "skill": "expense-audit",
   "status": "wip",
   "title": "费用报销单据 AI 稽核",
   "slogan": "每一张票都过一遍，而不是抽查",

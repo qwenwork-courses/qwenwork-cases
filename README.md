@@ -124,25 +124,42 @@ demos/
     └── hr-performance-shihuijun.html
 ```
 
-在案例文件里用 `links` 声明，路径带上子目录：
+在案例文件里用 `links` 声明，路径带上子目录。**详情页固定分三块展示**，用 `group` 字段归类：
+
+| group | 块名 | 放什么 |
+|---|---|---|
+| `skill` | 技能包 | SKILL.md、输出模板、打包好的 zip——客户拿去复用同一套标准 |
+| `sample` | 示例文档 | 输入素材（如待审合同 docx），客户下载后直接丢给 agent 就能复现输出 |
+| `output` | 产物 | 真实交付结果：交互式 HTML、已发布的在线页面等 |
+
+没写 `group` 的链接默认归到「产物」。
 
 ```js
 links: [
-  { label: '打开在线看板',   href: 'https://xxx.qwenwork.host/',                kind: 'live' },
-  { label: '多店广告周报',   href: 'demos/amazon-ads/amazon-weekly-report.html', kind: 'demo' },
-  { label: '查看 SOP 流程图', href: 'demos/course-creation/course-sop-flow.svg',   kind: 'doc'  },
-  { label: '下载技能包（15MB）', href: 'demos/course-creation/course-creation-kit.zip', kind: 'file' }
+  /* 技能包：点开预览 SKILL.md 正文，右上角下载的是整个 zip */
+  { group: 'skill', label: '合同审查技能包', kind: 'text',
+    href: 'demos/contract-review/contract-review-skill.md',
+    download: 'demos/contract-review/contract-review-skill-kit.zip',
+    downloadName: 'contract-review-skill-kit.zip',
+    note: '点开看技能定义，右上角下载包含 SKILL.md + 输出模板' },
+  { group: 'sample', label: '云枢平台采购合同.docx', kind: 'file',
+    href: 'demos/contract-review/云枢平台采购合同.docx', note: '示例合同，可直接丢给 agent' },
+  { group: 'output', label: '交互式审查工作台', kind: 'demo',
+    href: 'demos/contract-review/合同审查_星海制造_云枢平台采购_交互式.html' }
 ]
 ```
 
-`kind` 决定图标、副文与点击行为：
+`kind` 决定图标与点击行为：
 
-| kind | 副文 | 点击行为 |
-|---|---|---|
-| `live` | 在线体验 | 新窗口打开外链 |
-| `demo` | 查看演示 | 站内弹窗 iframe 预览，弹窗右上角带下载 |
-| `doc` | 查看文档 | 同上（md / svg 也能直接预览） |
-| `file` | 下载资料 | 直接触发下载，不进预览 |
+| kind | 点击行为 |
+|---|---|
+| `live` | 新窗口打开外链 |
+| `demo` | 站内弹窗 iframe 预览，右上角带下载 |
+| `doc` | 同上（svg 能直接预览） |
+| `text` | 取文本后在弹窗里展示。**`.md` 必须用这个**：它的 content-type 是 `text/markdown`，iframe 会直接触发下载而不是展示 |
+| `file` | 直接触发下载，不开预览（docx / zip） |
+
+两个可选字段：`download` 让右上角下载指向与预览不同的文件；`note` 覆盖卡片副文。
 
 两个命名约定：
 

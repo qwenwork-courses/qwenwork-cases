@@ -4,6 +4,7 @@ CASES.push(
   "id": "bid-compliance",
   "dept": "legal",
   "path": "skill",
+  "skill": "bid-compliance",
   "status": "wip",
   "title": "招投标文件合规核查",
   "slogan": "投标前把废标风险全部前置扫一遍",
