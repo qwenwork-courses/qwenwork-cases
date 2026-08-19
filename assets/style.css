@@ -1362,10 +1362,13 @@ ul { margin: 0; padding: 0; list-style: none; }
    minmax 下限取 240px：1200px 内容宽下三张卡能稳定同行，窄屏再自动掉行 */
 .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
 .link-card {
+  /* 图标尺寸与列间距抽成变量：分类标签靠它们算缩进，改图标大小时不会错位 */
+  --mat-ic: 38px;
+  --mat-gap: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 8px;
   padding: 16px 20px 18px;
   border: 1px solid var(--line);
   border-radius: var(--r-md);
@@ -1375,18 +1378,18 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 /* 卡片内第二行：图标 + 标题/副文 + 箭头。
    用 flex-start 而不是 center：副文两行时 center 会把图标压到副文那一行去，
-   顶对齐才能让图标与标题在同一行；分类标签单独占第一行，左边缘与图标齐 */
+   顶对齐才能让图标与标题在同一行 */
 .link-card-main {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: var(--mat-gap);
   width: 100%;
 }
 .link-card:hover { border-color: var(--accent-line); box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .link-card .ic {
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: var(--mat-ic);
+  height: var(--mat-ic);
   border-radius: 10px;
   background: var(--accent-soft);
   color: var(--accent-dark);
@@ -1394,9 +1397,11 @@ ul { margin: 0; padding: 0; list-style: none; }
   place-items: center;
 }
 .link-card .ic svg { width: 18px; height: 18px; }
-/* 分类小标签：三类用不同底色区分，单独占卡片顶部一行 */
+/* 分类小标签：三类用不同底色区分。
+   左侧缩进一个图标宽 + 列间距，让它正好落在标题文字上方而不是图标上方 */
 .link-group-tag {
   display: inline-block;
+  margin-left: calc(var(--mat-ic) + var(--mat-gap));
   padding: 2px 7px;
   border-radius: 5px;
   font-size: 10.5px;
