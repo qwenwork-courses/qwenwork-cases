@@ -28,6 +28,8 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/style.css">
+  <!-- 被官网 iframe 以 ?embed=1 内嵌时：隐藏顶部导航栏，预约演示改在 hero 内呈现 -->
+  <script>if (location.search.indexOf('embed=1') > -1) document.documentElement.classList.add('embed');</script>
 </head>
 <body>
 
@@ -380,6 +382,7 @@ function renderGallery() {
         </div>
 
         <div class="hero-slogan"><span>${SITE.slogan}</span></div>
+        <a href="#" class="hero-cta" id="ctaHero"><svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1H3a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"/><path d="M7 7l6-6"/><path d="M10 1h3v3"/></svg> 预约演示</a>
       </div>
     </section>
     <section class="gallery">
@@ -1176,6 +1179,15 @@ $('#shareCopy').addEventListener('click', () => {
 /* 预约演示：平滑滚到页脚联系区。用 JS 滚而不靠 href 改 hash，
    因为本站是 hash 路由（#/case/xxx），改成 #contact 会误触 popstate 回到列表页 */
 $('#ctaTop').addEventListener('click', e => {
+  e.preventDefault();
+  const el = $('#contact');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* embed 模式下 hero 里的「预约演示」：同样平滑滚到页脚联系区（事件委托，兼容 hero 重渲染）*/
+document.addEventListener('click', e => {
+  const c = e.target.closest && e.target.closest('#ctaHero');
+  if (!c) return;
   e.preventDefault();
   const el = $('#contact');
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });

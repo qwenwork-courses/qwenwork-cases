@@ -1933,3 +1933,29 @@ ul { margin: 0; padding: 0; list-style: none; }
   .site-header, .toolbar, .to-top, .site-footer, .detail-tabs, .card-actions { display: none; }
   .case-card { break-inside: avoid; box-shadow: none; }
 }
+
+/* ===== 嵌入模式（?embed=1，被官网 iframe 内嵌时） =====
+   隐藏自带顶部导航栏（官网已有自己的导航），
+   并把「预约演示」从导航栏移到 hero 标题区呈现 */
+.hero-cta { display: none; }
+html.embed .site-header { display: none; }
+html.embed .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 28px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 20px rgba(48, 191, 105, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+html.embed .hero-cta:hover {
+  transform: translateY(-1px);
+  background: var(--accent-dark);
+  box-shadow: 0 10px 26px rgba(48, 191, 105, 0.36);
+}
