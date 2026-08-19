@@ -56,7 +56,7 @@ CASES.push(
   "links": [
     {
       "label": "打开完整演示",
-      "href": "demos/hr-performance-shihuijun.html",
+      "href": "demos/hr-performance/hr-performance-shihuijun.html",
       "kind": "demo"
     }
   ],

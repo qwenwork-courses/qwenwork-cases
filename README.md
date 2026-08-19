@@ -9,11 +9,16 @@ qwenwork-cases/
 ├── index.html          主页面（含路由与渲染逻辑，logo 以 base64 内联）
 ├── assets/
 │   ├── style.css       样式（品牌绿浅色主题，设计令牌集中在 :root）
-│   ├── data.js         部门定义 DEPTS + 首页文案 SITE（CASES 在此声明为空数组）
+│   ├── data.js         行业分类 DEPTS + 实现路径 PATHS + 首页文案 SITE（CASES 在此声明为空数组）
 │   ├── cases/          ★ 一个案例一个文件，<id>.js 各自 CASES.push({...}) 自注册
+│   ├── og-cover.jpg    转发分享缩略图（1200×630，由 tools/og-card.html 生成）
 │   ├── qr.js           二维码编码器（byte 模式，无依赖）
 │   └── poster.js       分享海报 canvas 渲染
-└── demos/              演示物料（HTML / SVG / ZIP）
+└── demos/              ★ 演示与可下载材料，**每个案例一个子目录**，demos/<案例 id>/
+    ├── amazon-ads/
+    ├── contract-review/
+    ├── course-creation/
+    └── hr-performance/
 ```
 
 ### 案例文件是怎么装载的
@@ -100,6 +105,50 @@ media: { type: 'image', src: '<CDN 或 demos/xxx.gif>', caption: '风险条款 h
 
 `poster` 和 `caption` 可省略。不填 `media` 时，Hero 右侧会退而展示 `cover`；两个都没有才显示虚线占位框。**动图/视频体积大，建议也上 CDN，不要直接往仓库里塞。**
 
+## 相关材料（详情页 05 区块）怎么放
+
+可下载 / 可预览的文件放在 **`demos/<案例 id>/`**，与 `assets/cases/<案例 id>.js` 同名对应，一个案例一个子目录，不混放：
+
+```
+demos/
+├── amazon-ads/
+│   ├── amazon-ads-skills-share.html
+│   ├── amazon-weekly-report.html
+│   └── amazon-asin-report.html
+├── contract-review/
+│   └── contract-review-skill.md
+├── course-creation/
+│   ├── course-sop-flow.svg
+│   └── course-creation-kit.zip
+└── hr-performance/
+    └── hr-performance-shihuijun.html
+```
+
+在案例文件里用 `links` 声明，路径带上子目录：
+
+```js
+links: [
+  { label: '打开在线看板',   href: 'https://xxx.qwenwork.host/',                kind: 'live' },
+  { label: '多店广告周报',   href: 'demos/amazon-ads/amazon-weekly-report.html', kind: 'demo' },
+  { label: '查看 SOP 流程图', href: 'demos/course-creation/course-sop-flow.svg',   kind: 'doc'  },
+  { label: '下载技能包（15MB）', href: 'demos/course-creation/course-creation-kit.zip', kind: 'file' }
+]
+```
+
+`kind` 决定图标、副文与点击行为：
+
+| kind | 副文 | 点击行为 |
+|---|---|---|
+| `live` | 在线体验 | 新窗口打开外链 |
+| `demo` | 查看演示 | 站内弹窗 iframe 预览，弹窗右上角带下载 |
+| `doc` | 查看文档 | 同上（md / svg 也能直接预览） |
+| `file` | 下载资料 | 直接触发下载，不进预览 |
+
+两个命名约定：
+
+- 文件名**自带案例前缀**（如 `amazon-weekly-report.html` 而不是 `weekly-report.html`）——下载到本地后文件夹上下文会丢，名字得能单独看懂
+- 大体积文件要心里有数：现有材料共约 39MB（技能包 15MB、绩效汇报 12MB、亚马逊分享 10MB）。GitHub 单文件超 50MB 会警告、超 100MB 会报错，真正大的文件建议放 CDN 只存链接
+
 ## 怎么加一个新案例
 
 两步（每个案例一个文件，并行改不同案例不会撞车）：
@@ -120,6 +169,7 @@ media: { type: 'image', src: '<CDN 或 demos/xxx.gif>', caption: '风险条款 h
    <script src="assets/cases/<你的id>.js"></script>
    ```
    放在哪个位置 = 卡片在部门内的前后顺序。
+3. 如果有可下载 / 可预览的材料，新建 `demos/<你的id>/` 把文件放进去，在 `links` 里引用（见上一节「相关材料怎么放」）。
 
 改现有案例：直接改对应的 `assets/cases/<id>.js`，不碰其他文件。
 

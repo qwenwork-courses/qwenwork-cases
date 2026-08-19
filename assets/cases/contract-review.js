@@ -56,7 +56,7 @@ CASES.push(
   "links": [
     {
       "label": "查看技能定义（SKILL.md）",
-      "href": "demos/contract-review-skill.md",
+      "href": "demos/contract-review/contract-review-skill.md",
       "kind": "doc"
     }
   ],

@@ -56,17 +56,17 @@ CASES.push(
   "links": [
     {
       "label": "方法论分享（7 步法）",
-      "href": "demos/amazon-ads-skills-share.html",
+      "href": "demos/amazon-ads/amazon-ads-skills-share.html",
       "kind": "demo"
     },
     {
       "label": "多店广告周报",
-      "href": "demos/amazon-weekly-report.html",
+      "href": "demos/amazon-ads/amazon-weekly-report.html",
       "kind": "demo"
     },
     {
       "label": "单 ASIN 诊断报告",
-      "href": "demos/amazon-asin-report.html",
+      "href": "demos/amazon-ads/amazon-asin-report.html",
       "kind": "demo"
     }
   ],

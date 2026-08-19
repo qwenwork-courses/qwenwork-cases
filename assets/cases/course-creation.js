@@ -56,12 +56,12 @@ CASES.push(
   "links": [
     {
       "label": "查看 SOP 流程图",
-      "href": "demos/course-sop-flow.svg",
+      "href": "demos/course-creation/course-sop-flow.svg",
       "kind": "doc"
     },
     {
       "label": "下载技能包（15MB）",
-      "href": "demos/course-creation-kit.zip",
+      "href": "demos/course-creation/course-creation-kit.zip",
       "kind": "file"
     }
   ],
