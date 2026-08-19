@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "course-creation",
   "dept": "training",
+  "path": "skill",
   "status": "live",
   "title": "从零制课：课程视频流水线",
   "slogan": "给一份文字稿，产出带字幕的 1080p 成片",

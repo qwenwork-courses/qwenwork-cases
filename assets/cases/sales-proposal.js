@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "sales-proposal",
   "dept": "sales",
+  "path": "kb",
   "status": "wip",
   "title": "售前方案与标书生成",
   "slogan": "把打过的单变成下一单的弹药",

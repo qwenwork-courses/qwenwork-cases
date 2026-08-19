@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "ops-quality",
   "dept": "ops",
+  "path": "dataflow",
   "status": "wip",
   "title": "生产质量日报与异常追溯",
   "slogan": "异常发生当天就看见，不等月度复盘",

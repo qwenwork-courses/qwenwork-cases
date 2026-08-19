@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "admin-reception",
   "dept": "admin",
+  "path": "dataflow",
   "status": "live",
   "title": "行政接待一体化 AI 平台",
   "slogan": "一张 AI 表格，打通用车与用餐接待的全数据链路",

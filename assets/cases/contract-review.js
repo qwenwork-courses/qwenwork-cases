@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "contract-review",
   "dept": "legal",
+  "path": "skill",
   "status": "live",
   "title": "合同审查工作台",
   "slogan": "审查意见不是一份 PDF 报告，是能直接改成合同修订稿的工作台",

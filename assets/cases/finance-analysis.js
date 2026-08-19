@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "finance-analysis",
   "dept": "finance",
+  "path": "dataflow",
   "status": "wip",
   "title": "月度经营分析报告",
   "slogan": "数据一到，分析成稿",

@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "sales-visit-notes",
   "dept": "sales",
+  "path": "multimodal",
   "status": "wip",
   "title": "客户拜访纪要与商机推进",
   "slogan": "拜访完就有纪要，商机自己往前走",

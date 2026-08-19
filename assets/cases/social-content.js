@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "social-content",
   "dept": "marketing",
+  "path": "multimodal",
   "status": "wip",
   "title": "社媒内容矩阵批量生产",
   "slogan": "一个卖点，一次生成全平台内容",

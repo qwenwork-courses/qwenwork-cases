@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "hr-performance",
   "dept": "hr",
+  "path": "webapp",
   "status": "live",
   "title": "AI 绩效管理系统",
   "slogan": "从「HR 的一人狂欢」到「全员线上协同 · 沉淀绩效 SOP」",

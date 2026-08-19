@@ -1,8 +1,9 @@
-/* 市场 · 亚马逊广告全店 AI 巡查  (live) */
+/* 电商 · 亚马逊广告全店 AI 巡查  (live) */
 CASES.push(
 {
   "id": "amazon-ads",
-  "dept": "marketing",
+  "dept": "ecommerce",
+  "path": "dataflow",
   "status": "live",
   "title": "亚马逊广告全店 AI 巡查",
   "slogan": "从人工广告分析，到全店 AI 巡查——时间减半，覆盖翻十倍",

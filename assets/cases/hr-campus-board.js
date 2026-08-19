@@ -3,6 +3,7 @@ CASES.push(
 {
   "id": "hr-campus-board",
   "dept": "hr",
+  "path": "webapp",
   "status": "live",
   "title": "搭建校招面试管理看板",
   "slogan": "校招进度不用再问 HR，一屏实时看全链路",

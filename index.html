@@ -4,8 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="千问办公使用演示合集——按部门呈现真实业务场景案例，可直接给客户演示的交付物案例库。">
-  <meta name="theme-color" content="#5b4bff">
+  <meta name="theme-color" content="#30bf69">
   <title>千问办公 · 案例库</title>
+
+  <!-- 转发分享卡片：钉钉 / 微信 / 飞书读 og:*，X 读 twitter:*。
+       换域名时只需改下面的 SITE_ORIGIN 两处：canonical / og:url / og:image / twitter:image -->
+  <link rel="canonical" href="https://qwenwork-courses.github.io/qwenwork-cases/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="千问办公 · 案例库">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="千问办公 · 案例库｜全部门 AI 场景实践指引">
+  <meta property="og:description" content="13 个可直接演示的真实交付案例，覆盖法务、人力、市场、行政、培训、财务、销售、生产运营八大部门与电商行业。">
+  <meta property="og:url" content="https://qwenwork-courses.github.io/qwenwork-cases/">
+  <meta property="og:image" content="https://qwenwork-courses.github.io/qwenwork-cases/assets/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="千问办公案例库 · 全部门 AI 场景实践指引">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="千问办公 · 案例库｜全部门 AI 场景实践指引">
+  <meta name="twitter:description" content="13 个可直接演示的真实交付案例，覆盖八大部门与电商行业。">
+  <meta name="twitter:image" content="https://qwenwork-courses.github.io/qwenwork-cases/assets/og-cover.jpg">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2330bf69'/%3E%3Ctext x='16' y='23' font-size='19' font-family='PingFang SC,sans-serif' font-weight='700' text-anchor='middle' fill='%23fff'%3E千%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -157,8 +177,9 @@ const ICONS = {
   building: '<path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>',
   play: '<path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653z"/>',
   coins: '<path d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 3.75c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>',
-  target: '<M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/>',
+  target: '<path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/>',
   gauge: '<path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>',
+  cart: '<path d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"/>',
   arrowR: '<path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>',
   alertTri: '<path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>',
   pain: '<path d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 3.75h.008v.008H12v-.008z"/>',
@@ -185,9 +206,12 @@ const CARD_COLORS = [
 ];
 
 /* ---------- State ---------- */
-let currentDept = null;      // null = 全部
+/* 三个上级 tab 互斥：'dept' 按行业看｜'path' 按实现路径看｜'fav' 我的收藏。
+   两套分类不关联，因此各自只在对应 tab 下生效，二级选中项也分开记 */
+let viewMode = 'dept';       // 'dept' | 'path' | 'fav'
+let currentDept = null;      // null = 全部（仅「按行业看」下生效）
+let currentPath = null;      // null = 全部（仅「按实现路径看」下生效）
 let searchQuery = '';        // 搜索关键词
-let favOnly = false;         // 只看我的收藏
 let currentView = 'gallery'; // 'gallery' | 'detail'
 let currentCase = null;
 
@@ -242,11 +266,27 @@ function copyText(text, btn, restoreHTML) {
   }).catch(() => toast('复制失败，请手动选中文本'));
 }
 
-/* 案例链接：以当前页面地址为基准，只换 hash。
-   不能写死域名——本地预览 / 内网 / GitHub Pages 域名各不相同，
-   写死会导致复制出来的链接不是当前网址。search 参数丢掉保持链接干净。*/
+/* 案例链接：分享出去的链接必须是别人能打开的。
+   - 已部署到真实域名（GitHub Pages / 内网域名）：以当前页面地址为准，只换 hash，
+     这样换域名、放内网都不用改代码
+   - 本地预览（localhost / 127.0.0.1 / 局网 IP / file://）：回落到 SITE.publicUrl，
+     否则复制出来的是 127.0.0.1 这种只有自己能打开的地址
+   search 参数丢掉保持链接干净。*/
+function isLocalPreview() {
+  const hn = location.hostname;
+  return location.protocol === 'file:' || !hn
+    || hn === 'localhost' || hn === '127.0.0.1' || hn === '[::1]'
+    || /\.local$/.test(hn)
+    || /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hn);
+}
+
 function caseUrl(id) {
-  const u = new URL(location.href);
+  /* publicUrl 缺失或写错时不能抛异常（一抛整个分享弹窗就挂了），回落到当前地址 */
+  let base = location.href;
+  if (isLocalPreview() && SITE.publicUrl) {
+    try { base = new URL(SITE.publicUrl).href; } catch (e) { base = location.href; }
+  }
+  const u = new URL(base);
   u.search = '';
   u.hash = `#/case/${id}`;
   return u.href;
@@ -317,7 +357,7 @@ function renderGallery() {
       <div class="hero-inner">
         <div class="hero-stats-line">
           <span class="chev left">〈〈〈</span>
-          <span>${liveCount} 个真实交付 · ${deptCount} 大部门 · ${CASES.length} 个落地案例</span>
+          <span>${liveCount} 个真实交付 · ${deptCount} 个业务分类 · ${CASES.length} 个落地案例</span>
           <span class="chev right">〉〉〉</span>
         </div>
         <h1>${SITE.title}</h1>
@@ -340,22 +380,25 @@ function renderGallery() {
     </section>
     <section class="gallery">
       <div class="toolbar">
-        <div class="dept-filter" id="deptFilter"></div>
-        <div class="toolbar-right"><span class="results-count" id="resultsCount"></span></div>
+        <div class="toolbar-head">
+          <div class="view-tabs" id="viewTabs"></div>
+          <span class="results-count" id="resultsCount"></span>
+        </div>
+        <div class="dept-filter" id="subFilter"></div>
       </div>
       <div id="results"></div>
     </section>
   `;
   app.appendChild(wrap);
 
-  /* 搜索交互：只重绘 #deptFilter 与 #results，不碰 input，因此焦点不丢 */
+  /* 搜索交互：只重绘两行筛选胶囊与 #results，不碰 input，因此焦点不丢 */
   const input = $('#searchInput');
   const clearBtn = $('#searchClear');
   const onSearch = () => {
     searchQuery = input.value.trim();
     clearBtn.classList.toggle('show', !!searchQuery);
     syncHotChips();
-    renderDeptFilter();  /* 胶囊计数跟着搜索词变 */
+    renderFilters();  /* 两行胶囊计数都跟着搜索词变 */
     renderResults();
   };
   input.addEventListener('input', onSearch);
@@ -364,7 +407,7 @@ function renderGallery() {
     input.value = '';
     clearBtn.classList.remove('show');
     syncHotChips();
-    renderDeptFilter();
+    renderFilters();
     renderResults();
     input.focus();
   });
@@ -377,12 +420,12 @@ function renderGallery() {
       input.value = searchQuery;
       clearBtn.classList.toggle('show', !!searchQuery);
       syncHotChips();
-      renderDeptFilter();
+      renderFilters();
       renderResults();
     });
   });
 
-  renderDeptFilter();
+  renderFilters();
   renderResults();
 }
 
@@ -390,35 +433,63 @@ function syncHotChips() {
   $$('.hot-chip').forEach(c => c.classList.toggle('active', c.dataset.scene === searchQuery));
 }
 
-/* 部门筛选胶囊 + 「我的收藏」：计数随当前搜索词变化 */
-function renderDeptFilter() {
-  const box = $('#deptFilter');
+/* 上级 tab（按行业看 / 按实现路径看 / 我的收藏）+ 当前 tab 对应的二级分类。
+   两套分类互斥：切 tab 时不会带着另一套的选中项，也不做叠加筛选。
+   计数为 0 的类别置灰禁用而不隐藏，让完整分类表始终可见、切搜索词时也不跳行。 */
+function renderFilters() { renderViewTabs(); renderSubFilter(); }
+
+function renderViewTabs() {
+  const box = $('#viewTabs');
   if (!box) return;
   const hits = CASES.filter(c => matchCase(c, searchQuery));
+  const favCount = hits.filter(c => isFav(c.id)).length;
   box.innerHTML = '';
 
-  const allBtn = h('button', `dept-chip ${(currentDept === null && !favOnly) ? 'active' : ''}`, `全部 <span class="count">${hits.length}</span>`);
-  allBtn.onclick = () => { currentDept = null; favOnly = false; renderDeptFilter(); renderResults(); };
-  box.appendChild(allBtn);
-
-  DEPTS.forEach(d => {
-    const cnt = hits.filter(c => c.dept === d.id).length;
-    if (!cnt) return;
-    const btn = h('button', `dept-chip ${(currentDept === d.id && !favOnly) ? 'active' : ''}`, `${d.name} <span class="count">${cnt}</span>`);
-    btn.onclick = () => { currentDept = d.id; favOnly = false; renderDeptFilter(); renderResults(); };
+  const tabs = [
+    { id: 'dept', label: '按行业看' },
+    { id: 'path', label: '按实现路径看' },
+    { id: 'fav', label: `${svgIcon('bookmark', 13)} 我的收藏 <span class="count">${favCount}</span>` }
+  ];
+  tabs.forEach(t => {
+    const btn = h('button', `view-tab ${viewMode === t.id ? 'active' : ''}`, t.label);
+    btn.onclick = () => {
+      if (viewMode === t.id) return;
+      viewMode = t.id;
+      renderFilters();
+      renderResults();
+    };
     box.appendChild(btn);
   });
+}
 
-  /* 收藏胶囊放在最后，用书签图标与部门筛选区分开 */
-  const favCount = hits.filter(c => isFav(c.id)).length;
-  const favBtn = h('button', `dept-chip fav-chip ${favOnly ? 'active' : ''}`,
-    `${svgIcon('bookmark', 14)} 我的收藏 <span class="count">${favCount}</span>`);
-  favBtn.onclick = () => {
-    favOnly = !favOnly;
-    if (favOnly) currentDept = null;   /* 收藏视图不限部门 */
-    renderDeptFilter(); renderResults();
-  };
-  box.appendChild(favBtn);
+/* 二级分类：按行业看→DEPTS胶囊，按实现路径看→PATHS胶囊，收藏视图→不出二级 */
+function renderSubFilter() {
+  const box = $('#subFilter');
+  if (!box) return;
+  box.innerHTML = '';
+  box.hidden = viewMode === 'fav';
+  if (viewMode === 'fav') return;
+
+  const byPath = viewMode === 'path';
+  const groups = byPath ? PATHS : DEPTS;
+  const keyOf = c => (byPath ? c.path : c.dept);
+  const current = byPath ? currentPath : currentDept;
+  const setCurrent = v => { if (byPath) currentPath = v; else currentDept = v; };
+  const hits = CASES.filter(c => matchCase(c, searchQuery));
+
+  const allBtn = h('button', `dept-chip ${current === null ? 'active' : ''}`, `全部 <span class="count">${hits.length}</span>`);
+  allBtn.onclick = () => { setCurrent(null); renderFilters(); renderResults(); };
+  box.appendChild(allBtn);
+
+  groups.forEach(g => {
+    const cnt = hits.filter(c => keyOf(c) === g.id).length;
+    const btn = h('button', `dept-chip ${byPath ? 'path-chip' : ''} ${cnt ? '' : 'is-empty'} ${current === g.id ? 'active' : ''}`,
+      `${g.name} <span class="count">${cnt}</span>`);
+    btn.title = g.desc || '';
+    if (!cnt) btn.disabled = true;
+    btn.onclick = () => { setCurrent(current === g.id ? null : g.id); renderFilters(); renderResults(); };
+    box.appendChild(btn);
+  });
 }
 
 /* 全文匹配：标题/slogan/概述/标签/痛点/方案/人群/部门名/客户均参与，多词需全部命中。
@@ -427,9 +498,10 @@ function renderDeptFilter() {
 function matchCase(c, q) {
   if (!q) return true;
   const dept = DEPTS.find(d => d.id === c.dept) || {};
+  const path = PATHS.find(p => p.id === c.path) || {};
   const hay = [
     c.title, c.slogan, c.summary, c.client, c.clientNote, c.before, c.after, c.prompt,
-    dept.name, dept.en,
+    dept.name, dept.en, path.name, path.en,
     ...(c.tags || []), ...(c.audience || []), ...(c.pains || []),
     ...(c.solutions || []), ...(c.demoLine || []),
     ...(c.metrics || []).map(m => `${m.value} ${m.label}`),
@@ -443,20 +515,23 @@ function renderResults() {
   if (!box) return;
   box.innerHTML = '';
 
+  const isFavView = viewMode === 'fav';
+  const byPath = viewMode === 'path';
   const hits = CASES.filter(c =>
     matchCase(c, searchQuery)
-    && (currentDept ? c.dept === currentDept : true)
-    && (favOnly ? isFav(c.id) : true)
+    && (isFavView ? isFav(c.id) : true)
+    && (byPath ? (currentPath ? c.path === currentPath : true)
+      : (!isFavView && currentDept ? c.dept === currentDept : true))
   );
   const countEl = $('#resultsCount');
   if (countEl) {
-    countEl.textContent = favOnly ? `已收藏 ${hits.length} 个案例`
+    countEl.textContent = isFavView ? `已收藏 ${hits.length} 个案例`
       : searchQuery ? `匹配到 ${hits.length} 个案例`
         : `${hits.length} 个案例`;
   }
 
   if (!hits.length) {
-    box.innerHTML = favOnly
+    box.innerHTML = isFavView
       ? `<div class="empty-state">
            <strong>还没有收藏任何案例</strong>
            <span>点卡片右上角的书签图标，把常用案例收起来，下次直接从这里拿</span>
@@ -468,15 +543,34 @@ function renderResults() {
     return;
   }
 
-  const deptsToShow = currentDept ? DEPTS.filter(d => d.id === currentDept) : DEPTS;
-  deptsToShow.forEach(dept => {
-    const cases = hits.filter(c => c.dept === dept.id);
+  /* 收藏视图：收藏本身跨两套分类，不分组，直接一片网格 */
+  if (isFavView) {
+    const grid = h('div', 'case-grid');
+    hits.forEach((c, ci) => {
+      const dept = DEPTS.find(d => d.id === c.dept) || {};
+      grid.appendChild(renderCard(c, dept, CARD_COLORS[ci % CARD_COLORS.length]));
+    });
+    box.appendChild(grid);
+    return;
+  }
+
+  /* 按行业看→按 DEPTS 分组；按实现路径看→按 PATHS 分组（分组头用各自的名称/英文/说明）*/
+  const groups = byPath ? PATHS : DEPTS;
+  const current = byPath ? currentPath : currentDept;
+  const keyOf = c => (byPath ? c.path : c.dept);
+  const groupsToShow = current ? groups.filter(g => g.id === current) : groups;
+
+  groupsToShow.forEach(g => {
+    const cases = hits.filter(c => keyOf(c) === g.id);
     if (!cases.length) return;
     const sec = h('section', 'dept-section');
-    sec.id = `dept-${dept.id}`;
-    sec.innerHTML = `<div class="dept-head"><h2>${dept.name}</h2><span class="en">${dept.en}</span><span class="desc">${dept.desc}</span></div>`;
+    sec.id = `${byPath ? 'path' : 'dept'}-${g.id}`;
+    sec.innerHTML = `<div class="dept-head"><h2>${g.name}</h2><span class="en">${g.en}</span><span class="desc">${g.desc}</span></div>`;
     const grid = h('div', 'case-grid');
-    cases.forEach((c, ci) => grid.appendChild(renderCard(c, dept, CARD_COLORS[ci % CARD_COLORS.length])));
+    cases.forEach((c, ci) => {
+      const dept = DEPTS.find(d => d.id === c.dept) || {};
+      grid.appendChild(renderCard(c, dept, CARD_COLORS[ci % CARD_COLORS.length]));
+    });
     sec.appendChild(grid);
     box.appendChild(sec);
   });
@@ -485,6 +579,7 @@ function renderResults() {
 function renderCard(c, dept, colors) {
   const card = h('article', `case-card ${c.status === 'wip' ? 'is-wip' : ''}`);
   const statusLabel = c.status === 'live' ? '可演示' : c.status === 'demo' ? '有素材' : '待补充';
+  const path = PATHS.find(p => p.id === c.path) || {};
   card.style.setProperty('--c1', colors[0]);
   card.style.setProperty('--c2', colors[1]);
   const faved = isFav(c.id);
@@ -495,7 +590,10 @@ function renderCard(c, dept, colors) {
       <button type="button" class="card-fav ${faved ? 'active' : ''}" aria-label="收藏案例" aria-pressed="${faved}">${svgIcon('bookmark', 18)}</button>
     </div>
     <div class="card-body">
-      <span class="card-dept">${dept.name}${c.client ? ` · ${c.client}` : ''}</span>
+      <div class="card-meta">
+        <span class="card-dept">${dept.name}${c.client ? ` · ${c.client}` : ''}</span>
+        ${path.name ? `<span class="card-path" title="实现路径：${path.desc || ''}">${path.name}</span>` : ''}
+      </div>
       <h3>${c.title}</h3>
       <p class="card-slogan">${c.slogan}</p>
       <div class="card-badges">${c.tags.slice(0, 3).map(t => `<span>${t}</span>`).join('')}</div>
@@ -519,9 +617,9 @@ function renderCard(c, dept, colors) {
     e.currentTarget.classList.toggle('active', on);
     e.currentTarget.setAttribute('aria-pressed', on);
     toast(on ? '已收藏案例' : '已取消收藏');
-    /* 收藏数变了，刷新胶囊计数；若正在收藏视图，取消后该卡需移出 */
-    if ($('#deptFilter')) renderDeptFilter();
-    if (favOnly) renderResults();
+    /* 收藏数变了，刷新 tab 上的计数；若正在收藏视图，取消后该卡需移出 */
+    if ($('#viewTabs')) renderFilters();
+    if (viewMode === 'fav') renderResults();
   });
 
   const copyBtn = card.querySelector('.card-copy');
@@ -538,6 +636,7 @@ function renderDetail() {
   const c = currentCase;
   if (!c) { navigate('gallery'); return; }
   const dept = DEPTS.find(d => d.id === c.dept) || {};
+  const path = PATHS.find(p => p.id === c.path) || {};
   const app = $('#app');
   app.innerHTML = '';
   const wrap = h('div', 'view detail-page');
@@ -554,7 +653,7 @@ function renderDetail() {
   `;
   wrap.querySelector('.back-home').addEventListener('click', e => { e.preventDefault(); navigate('gallery'); });
   const deptLink = wrap.querySelector('[data-dept]');
-  if (deptLink) deptLink.addEventListener('click', e => { e.preventDefault(); currentDept = dept.id; navigate('gallery'); });
+  if (deptLink) deptLink.addEventListener('click', e => { e.preventDefault(); viewMode = 'dept'; currentDept = dept.id; navigate('gallery'); });
 
   /* Hero */
   const faved = isFav(c.id);
@@ -563,6 +662,7 @@ function renderDetail() {
     <div class="detail-copy">
       <div class="detail-chips">
         <span class="chip-dept">${dept.name}</span>
+        ${path.name ? `<button type="button" class="chip-path" data-path="${path.id}" title="${path.desc || ''}">${path.name}</button>` : ''}
       </div>
       <h1>${c.title}</h1>
       <p class="detail-slogan">${c.slogan}</p>
@@ -590,6 +690,13 @@ function renderDetail() {
   wrap.appendChild(hero);
 
   /* Hero 按钮交互 */
+  const pathChip = hero.querySelector('.chip-path');
+  if (pathChip) pathChip.addEventListener('click', () => {
+    /* 点路径标签回列表页，直接切到「按实现路径看」并定位到该路径 */
+    viewMode = 'path'; currentPath = c.path;
+    navigate('gallery');
+    setTimeout(() => { const el = $('.toolbar'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60);
+  });
   const copyBtn = hero.querySelector('.copy-prompt');
   if (copyBtn) copyBtn.addEventListener('click', () => copyText(c.prompt, copyBtn, `${svgIcon('copy', 16)} 一键复制 Prompt`));
   hero.querySelector('.share-case').addEventListener('click', () => shareCase(c));
@@ -768,7 +875,7 @@ function renderNav() {
     if (!cnt) return;
     const a = h('a', '', d.name);
     a.href = `#dept-${d.id}`;
-    a.addEventListener('click', e => { e.preventDefault(); currentDept = d.id; navigate('gallery'); setTimeout(() => { const el = $(`#dept-${d.id}`); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 60); });
+    a.addEventListener('click', e => { e.preventDefault(); viewMode = 'dept'; currentDept = d.id; navigate('gallery'); setTimeout(() => { const el = $(`#dept-${d.id}`); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 60); });
     nav.appendChild(a);
   });
 }
