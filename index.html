@@ -155,7 +155,9 @@
 <script src="assets/cases/amazon-ads.js"></script>
 <script src="assets/cases/social-content.js"></script>
 <script src="assets/cases/admin-reception.js"></script>
+<script src="assets/cases/personal-workspace.js"></script>
 <script src="assets/cases/course-creation.js"></script>
+<script src="assets/cases/course-poster.js"></script>
 <script src="assets/cases/finance-analysis.js"></script>
 <script src="assets/cases/expense-audit.js"></script>
 <script src="assets/cases/sales-visit-notes.js"></script>
@@ -794,8 +796,8 @@ function renderDetail() {
     { id: 'compare',  label: '效果对比', has: !!(c.before && c.after) },
     /* 有视频就叫「视频演示」，没视频才叫「演示路径」 */
     { id: 'demo',     label: c.video ? '视频演示' : '演示路径', has: !!c.video || c.demoLine.length > 0 },
-    { id: 'prompt',   label: '复制 Prompt', has: !!c.prompt },
-    { id: 'material', label: '相关材料', has: c.links.length > 0 }
+    { id: 'material', label: '相关材料', has: c.links.length > 0 },
+    { id: 'prompt',   label: '复制 Prompt', has: !!c.prompt }
   ].filter(t => t.has);
 
   if (tabDefs.length > 1) {
@@ -868,37 +870,7 @@ function renderDetail() {
     if (c.video) fitVideoBox(sec.querySelector('.video-block'));   /* 视频框高度控在一屏内 */
   }
 
-  /* Section 04: 复制 Prompt（有 promptSections 就分栏展示，避免一大坨文字）*/
-  if (c.prompt) {
-    const sec = h('section', 'detail-section');
-    sec.id = 'sec-prompt';
-    const structured = Array.isArray(c.promptSections) && c.promptSections.length;
-    sec.innerHTML = `
-      <span class="section-label">04 / 复制 PROMPT</span>
-      ${c.skill ? `<div class="prompt-skill-note">${svgIcon('scale', 16)}<span>本案例基于千问办公技能实现，需先安装对应技能（如 <b>${c.skill}</b>），再发送下面的 Prompt。实际技能名以你安装的为准。</span></div>` : ''}
-      <div class="prompt-box">
-        <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制全文</button></div>
-        ${structured ? `
-          <div class="prompt-struct">
-            ${c.promptLead ? `<p class="prompt-lead">${c.promptLead}</p>` : ''}
-            <div class="prompt-cols">
-              ${c.promptSections.map(s => `
-                <section>
-                  <h4>${s.title}</h4>
-                  <ul>${s.items.map(i => `<li>${i}</li>`).join('')}</ul>
-                </section>
-              `).join('')}
-            </div>
-            ${c.promptTail ? `<p class="prompt-tail">${c.promptTail}</p>` : ''}
-          </div>` : `<pre>${c.prompt}</pre>`}
-      </div>
-    `;
-    wrap.appendChild(sec);
-    const btn2 = sec.querySelector('.copy-prompt-2');
-    btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制全文`));
-  }
-
-  /* Section 05: 相关材料——全部材料排成一行（窄屏自动换行）。
+  /* Section 04: 相关材料——全部材料排成一行（窄屏自动换行）。
      不再按分组堆成多行，分类改用卡片上的小标签表达；
      顺序固定为 技能包 → 示例文档 → 产物，没标 group 的旧链接归为产物 */
   if (c.links.length) {
@@ -913,7 +885,7 @@ function renderDetail() {
       .sort((a, b) => ORDER.indexOf(a.g) - ORDER.indexOf(b.g));
 
     sec.innerHTML = `
-      <span class="section-label">05 / 相关材料</span>
+      <span class="section-label">04 / 相关材料</span>
       <div class="links-grid">
         ${items.map(({ l, i, g }) => `
           <a class="link-card" href="${l.href}" data-link-id="${i}">
@@ -937,6 +909,40 @@ function renderDetail() {
         if (openInModal(link)) e.preventDefault();
       });
     });
+  }
+
+  /* Section 05: 复制 Prompt（有 promptSections 就分栏展示，避免一大坨文字）*/
+  if (c.prompt) {
+    const sec = h('section', 'detail-section');
+    sec.id = 'sec-prompt';
+    const structured = Array.isArray(c.promptSections) && c.promptSections.length;
+    sec.innerHTML = `
+      <span class="section-label">05 / 复制 PROMPT</span>
+      ${c.skill ? `<div class="prompt-skill-note">${svgIcon('scale', 16)}<span>本案例基于千问办公技能实现，需先安装对应技能（如 <b>${c.skill}</b>），再发送下面的 Prompt。实际技能名以你安装的为准。</span></div>` : ''}
+      <div class="prompt-box">
+        <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制全文</button></div>
+        ${structured ? `
+          <div class="prompt-struct">
+            ${c.promptLead ? `<p class="prompt-lead">${c.promptLead}</p>` : ''}
+            <div class="prompt-cols">
+              ${c.promptSections.map(s => `
+                <section>
+                  <h4>${s.title}</h4>
+                  <ul>${s.items.map(i => `<li>${i}</li>`).join('')}</ul>
+                </section>
+              `).join('')}
+            </div>
+            ${c.promptTail ? `<p class="prompt-tail">${c.promptTail}</p>` : ''}
+          </div>` : `<pre class="prompt-raw"></pre>`}
+      </div>
+    `;
+    /* Prompt 正文用 textContent 灌进去：里面可能带 <a target="_blank"> 这类尖括号，
+       走 innerHTML 会被当成标签吃掉，而复制出去的又必须是原文 */
+    const pre = sec.querySelector('.prompt-raw');
+    if (pre) pre.textContent = c.prompt;
+    wrap.appendChild(sec);
+    const btn2 = sec.querySelector('.copy-prompt-2');
+    btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制全文`));
   }
 
   /* WIP Notice */
