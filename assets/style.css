@@ -1063,7 +1063,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   line-height: 1.8;
 }
 
-/* 视频演示区块：严格按视频原比例、不超采样，避免两侧或上下黑边 */
+/* 视频演示区块：严格按视频原比例、不超采样，避免两侧或上下黑边。
+   max-width 由 JS（fitVideoBox）按视口高度写 inline，保证一屏内能看完整 */
 .video-block {
   width: 100%;
   max-width: 1216px;      /* 当前案例视频原尺寸宽 1216px；屏宽 > 1216 时保持原尺不拉伸发糊 */
@@ -1078,10 +1079,46 @@ ul { margin: 0; padding: 0; list-style: none; }
   width: 100%;
   height: auto;           /* 高度按原比例自动，不封顶 */
   /* aspect-ratio 由渲染时读取 video.width/height 写入 inline style；
-     目的：避免 poster 图不同尺寸时预加载阶段把元素撜成错的高度。
-     object-fit: cover 确保 poster 铺满，避免与视频不同宽高比时出现上下黑条；
-     视频自身因与元素同宽高比（来自同一组 width/height），不会被裁切 */
+     目的：避免 poster 图不同尺寸时预加载阶段把元素撑成错的高度。
+     object-fit: cover 确保 poster 铺满（当前 poster 2532×1356 与视频 1216×720 比例不同），
+     视频自身因与元素同宽高比，普通视图下不会被裁切 */
   object-fit: cover;
+}
+/* 全屏时元素变成屏幕比例（常见 1.5~1.78），与视频 1.689 不一致，
+   再继续 cover 就会裁掉左右内容——所以全屏必须切成 contain，
+   同时清掉我们自己加的尺寸限制，交给浏览器全屏层接管。
+   两个前缀拆开写：部分引擎遇到不认识的伪类会丢掉整条规则。
+   两种入口都盖：视频自身全屏（原生控件）与整个 figure 全屏 */
+.video-block video:fullscreen,
+.video-block:fullscreen video {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  background: #000;
+  aspect-ratio: auto !important;   /* 盖掉 inline 的 aspect-ratio，否则全屏下会被它锁死高度 */
+}
+.video-block video:-webkit-full-screen,
+.video-block:-webkit-full-screen video {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  background: #000;
+  aspect-ratio: auto !important;
+}
+/* figure 自身全屏时去掉我们给的边框与 inline max-width，否则视频只占屏幕一小块 */
+.video-block:fullscreen,
+.video-block:-webkit-full-screen {
+  max-width: none !important;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #000;
 }
 .video-block figcaption {
   padding: 11px 16px;
@@ -1091,6 +1128,29 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-size: 12.5px;
 }
 .demo-line.after-video { margin-top: 22px; }
+
+/* 技能类案例：复制 Prompt 前的安装提示 */
+.prompt-skill-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 14px;
+  padding: 12px 15px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.prompt-skill-note svg { flex: none; margin-top: 2px; }
+.prompt-skill-note b {
+  font-weight: 600;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(48, 191, 105, 0.14);
+}
 
 /* 分栏 Prompt */
 .prompt-struct { padding: 22px 24px; }
@@ -1157,9 +1217,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   margin-bottom: 20px;
   color: var(--accent-3);
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
 }
 .detail-section > h2 {
   margin: 0 0 22px;
@@ -1809,9 +1869,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   /* 手机上 10.5px 太小，指标说明与区块标签统一抬到 11.5px */
   .card-metrics small,
   .roi-summary small,
-  .section-label,
   .preview-note,
   .preview-badge { font-size: 11.5px; }
+  .section-label { font-size: 12.5px; }
   .prompt-cols { grid-template-columns: minmax(0, 1fr); }
 
   /* 页脚：按钮与二维码改为纵向堆叠 */

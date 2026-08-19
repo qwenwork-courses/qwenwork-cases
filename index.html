@@ -475,6 +475,21 @@ function enableXScroll(el) {
   sync();
 }
 
+/* 视频框高度控在一屏内：按视口高算高度预算，再用视频原比例反推最大宽度。
+   为何不用纯 CSS：块级元素上 aspect-ratio + max-height 不会反推宽度（宽度已由父容器确定），
+   结果只是把框压短、视频反而出现左右黑边，所以这里算好写 inline max-width。 */
+function fitVideoBox(el) {
+  /* 渲染阶段 wrap 还没挂到文档上，所以要能直接传元素；resize 时才走 document 查询 */
+  const fig = el || $('.video-block');
+  if (!fig) return;
+  const vw = +fig.dataset.vw, vh = +fig.dataset.vh;
+  if (!vw || !vh) return;
+  /* 260px 给顶部导航 + Tab 条 + 区块标题 + 下方演示步骤的一部分留白 */
+  const budget = Math.max(280, Math.min(620, window.innerHeight - 260));
+  fig.style.maxWidth = Math.min(vw, Math.round(budget * vw / vh)) + 'px';
+}
+window.addEventListener('resize', () => fitVideoBox());
+
 /* 重绘胶囊后把选中项拉到可见区——不用 scrollIntoView，避免它顺手滚动页面。
    位置用 rect 差值算：offsetLeft 是相对定位祖先的，而胶囊行本身不是定位元素，算出来会偏。
    余量取 34px：比边缘渐隐的 30px 大一点，否则选中项会刚好藏在渐隐里看不清 */
@@ -842,21 +857,23 @@ function renderDetail() {
     sec.innerHTML = `
       <span class="section-label">${label}</span>
       ${c.video ? `
-        <figure class="video-block">
+        <figure class="video-block" data-vw="${c.video.width || ''}" data-vh="${c.video.height || ''}">
           <video src="${c.video.src}" poster="${c.video.poster || ''}"${c.video.width ? ` width="${c.video.width}" height="${c.video.height}" style="aspect-ratio:${c.video.width}/${c.video.height}"` : ''} controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata"></video>
         </figure>` : '<h2>怎么用？</h2>'}
       ${c.demoLine.length ? `<ul class="demo-line${c.video ? ' after-video' : ''}">${c.demoLine.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}
     `;
     wrap.appendChild(sec);
+    if (c.video) fitVideoBox(sec.querySelector('.video-block'));   /* 视频框高度控在一屏内 */
   }
 
-  /* Section 04: 复制 Prompt（有 promptSections 就分栏展示，避免一大坨文字） */
+  /* Section 04: 复制 Prompt（有 promptSections 就分栏展示，避免一大坨文字）*/
   if (c.prompt) {
     const sec = h('section', 'detail-section');
     sec.id = 'sec-prompt';
     const structured = Array.isArray(c.promptSections) && c.promptSections.length;
     sec.innerHTML = `
       <span class="section-label">04 / 复制 PROMPT</span>
+      ${c.skill ? `<div class="prompt-skill-note">${svgIcon('scale', 16)}<span>本案例基于千问办公技能实现，需先安装对应技能（如 <b>${c.skill}</b>），再发送下面的 Prompt。实际技能名以你安装的为准。</span></div>` : ''}
       <div class="prompt-box">
         <div class="prompt-head"><span>直接告诉千问办公你的需求</span><button type="button" class="btn copy-prompt-2">${svgIcon('copy', 14)} 复制全文</button></div>
         ${structured ? `
