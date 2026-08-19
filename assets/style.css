@@ -29,6 +29,9 @@
   --accent-soft: #eefff5;
   --accent-line: rgba(48, 191, 105, 0.22);
   --accent-dark: #22975a;
+  /* 比 accent-dark 更深一级，专用于白底上的小号文字（如区块序号标题）；
+     对比度 5.4:1 过 WCAG AA，而 accent-3 只有 1.4:1、accent-dark 3.7:1 都不够 */
+  --accent-deep: #16794a;
 
   /* 语义色 */
   --success: #30bf69;
@@ -1216,7 +1219,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .section-label {
   display: block;
   margin-bottom: 20px;
-  color: var(--accent-3);
+  color: var(--accent-deep);
   font-size: 13.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
