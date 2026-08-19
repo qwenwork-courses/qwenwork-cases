@@ -433,6 +433,64 @@ function syncHotChips() {
   $$('.hot-chip').forEach(c => c.classList.toggle('active', c.dataset.scene === searchQuery));
 }
 
+/* 横向滑动行的可用性补齐（筛选胶囊行、详情页 Tab 条共用）：
+   1. 边缘渐隐提示——隐了滚动条之后必须告诉用户“还有内容可滑”
+   2. 指针拖拽——手机上原生滑动很自然，但桌面缩窗口时鼠标拖不动（原生只认横向滚轮）
+   3. 拖动超过阈值后吞掉这次 click，否则松手会误触胶囊 */
+function enableXScroll(el) {
+  if (!el) return;
+  el.classList.add('x-scroll');
+  const sync = () => {
+    const max = el.scrollWidth - el.clientWidth;
+    el.classList.toggle('can-scroll-left', max > 2 && el.scrollLeft > 2);
+    el.classList.toggle('can-scroll-right', max > 2 && el.scrollLeft < max - 2);
+  };
+  el._xSync = sync;
+  if (el.dataset.xScroll) { sync(); return; }
+  el.dataset.xScroll = '1';
+
+  el.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  if (window.ResizeObserver) new ResizeObserver(sync).observe(el);
+
+  let down = false, startX = 0, startLeft = 0, moved = false;
+  el.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' || e.button !== 0) return;   /* 触摸交给原生惯性滚动 */
+    down = true; moved = false; startX = e.clientX; startLeft = el.scrollLeft;
+  });
+  el.addEventListener('pointermove', e => {
+    if (!down) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 4) { moved = true; el.classList.add('is-dragging'); }
+    if (moved) { el.scrollLeft = startLeft - dx; e.preventDefault(); }
+  });
+  const end = () => {
+    if (moved) el.addEventListener('click', ev => { ev.stopPropagation(); ev.preventDefault(); }, { capture: true, once: true });
+    down = false; moved = false; el.classList.remove('is-dragging');
+    sync();
+  };
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointercancel', end);
+  el.addEventListener('pointerleave', () => { if (down) end(); });
+  sync();
+}
+
+/* 重绘胶囊后把选中项拉到可见区——不用 scrollIntoView，避免它顺手滚动页面。
+   位置用 rect 差值算：offsetLeft 是相对定位祖先的，而胶囊行本身不是定位元素，算出来会偏。
+   余量取 34px：比边缘渐隐的 30px 大一点，否则选中项会刚好藏在渐隐里看不清 */
+function keepActiveVisible(box) {
+  const active = box.querySelector('.dept-chip.active');
+  if (!active) return;
+  const pad = 34;
+  const max = Math.max(0, box.scrollWidth - box.clientWidth);
+  const bx = box.getBoundingClientRect();
+  const ax = active.getBoundingClientRect();
+  const l = ax.left - bx.left + box.scrollLeft;
+  const r = l + ax.width;
+  if (l - pad < box.scrollLeft) box.scrollLeft = Math.max(0, l - pad);
+  else if (r + pad > box.scrollLeft + box.clientWidth) box.scrollLeft = Math.min(max, r + pad - box.clientWidth);
+}
+
 /* 上级 tab（按行业看 / 按实现路径看 / 我的收藏）+ 当前 tab 对应的二级分类。
    两套分类互斥：切 tab 时不会带着另一套的选中项，也不做叠加筛选。
    计数为 0 的类别置灰禁用而不隐藏，让完整分类表始终可见、切搜索词时也不跳行。 */
@@ -490,6 +548,10 @@ function renderSubFilter() {
     btn.onclick = () => { setCurrent(current === g.id ? null : g.id); renderFilters(); renderResults(); };
     box.appendChild(btn);
   });
+
+  enableXScroll(box);
+  keepActiveVisible(box);
+  if (box._xSync) box._xSync();   /* 上一步可能改了 scrollLeft，边缘渐隐得重算 */
 }
 
 /* 全文匹配：标题/slogan/概述/标签/痛点/方案/人群/部门名/客户均参与，多词需全部命中。
@@ -730,6 +792,7 @@ function renderDetail() {
       });
     });
     wrap.appendChild(tabs);
+    enableXScroll(tabs.querySelector('.tabs-inner'));   /* Tab 多于屏宽时同样给滑动提示与拖拽 */
   }
 
   /* Section 01: 案例概览（场景挑战 & 解决思路） */

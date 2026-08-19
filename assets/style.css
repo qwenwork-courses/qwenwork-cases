@@ -357,6 +357,24 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .dept-filter { display: flex; gap: 7px; flex-wrap: wrap; }
 
+/* 可横向滑动的胶囊行 / Tab 条：
+   隐了滚动条以后用户看不出能滑，所以用边缘渐隐做提示（类名由 JS 根据实际滚动位置切）。
+   同时 JS 里给了指针拖拽，所以桌面缩窗口时鼠标也能拖动（原生只认触摸/横向滚轮）*/
+.x-scroll { cursor: grab; }
+.x-scroll.is-dragging { cursor: grabbing; user-select: none; }
+.x-scroll.can-scroll-right {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
+}
+.x-scroll.can-scroll-left {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 30px);
+  mask-image: linear-gradient(to right, transparent 0, #000 30px);
+}
+.x-scroll.can-scroll-left.can-scroll-right {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 30px, #000 calc(100% - 30px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 30px, #000 calc(100% - 30px), transparent 100%);
+}
+
 /* 计数为 0 的类别：保留位置但不可点，避免切筛选时整行跳动 */
 .dept-chip.is-empty {
   opacity: 0.4;
@@ -1739,6 +1757,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   .toolbar { gap: 10px; }
   .toolbar-head { gap: 8px; }
   .view-tab { padding: 7px 12px; font-size: 12.5px; }
+  /* 详情页：面包屑与路径标签的点击热区拉到 32px 以上 */
+  .breadcrumb { padding: 18px 0 14px; }
+  .breadcrumb a { padding: 6px 0; }
+  .detail-chips .chip-path { min-height: 32px; padding: 7px 12px; }
   .dept-filter {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1784,6 +1806,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   .tabs-inner a { padding: 13px 14px; font-size: 13px; }
   .tabs-inner a::after { left: 14px; right: 14px; }
   .section-lead { font-size: 14px; }
+  /* 手机上 10.5px 太小，指标说明与区块标签统一抬到 11.5px */
+  .card-metrics small,
+  .roi-summary small,
+  .section-label,
+  .preview-note,
+  .preview-badge { font-size: 11.5px; }
   .prompt-cols { grid-template-columns: minmax(0, 1fr); }
 
   /* 页脚：按钮与二维码改为纵向堆叠 */
