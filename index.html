@@ -897,39 +897,35 @@ function renderDetail() {
     btn2.addEventListener('click', () => copyText(c.prompt, btn2, `${svgIcon('copy', 14)} 复制全文`));
   }
 
-  /* Section 05: 相关材料——固定分三块：技能包 / 示例文档 / 产物。
-     没标 group 的旧链接归到「产物」（现有链接绝大多数是在线看板/报告）*/
+  /* Section 05: 相关材料——全部材料排成一行（窄屏自动换行）。
+     不再按分组堆成多行，分类改用卡片上的小标签表达；
+     顺序固定为 技能包 → 示例文档 → 产物，没标 group 的旧链接归为产物 */
   if (c.links.length) {
     const sec = h('section', 'detail-section');
     sec.id = 'sec-material';
     const kindIcon = { demo: 'live', doc: 'doc', text: 'doc', file: 'download', live: 'live' };
     const kindNote = { live: '在线体验', demo: '查看演示', doc: '查看文档', text: '点开预览 · 可下载', file: '下载资料' };
-    const GROUPS = [
-      { id: 'skill',  name: '技能包',   desc: '拿这个去复用同一套审查 / 生产标准' },
-      { id: 'sample', name: '示例文档', desc: '下载后直接丢给 agent，能复现同样的输出' },
-      { id: 'output', name: '产物',     desc: '真实交付结果，可在线看也可下载' }
-    ];
-    const grouped = GROUPS.map(g => ({
-      ...g,
-      items: c.links.filter(l => (l.group || 'output') === g.id)
-    })).filter(g => g.items.length);
+    const GROUP_NAME = { skill: '技能包', sample: '示例文档', output: '产物' };
+    const ORDER = ['skill', 'sample', 'output'];
+    const items = c.links
+      .map((l, i) => ({ l, i, g: GROUP_NAME[l.group] ? l.group : 'output' }))
+      .sort((a, b) => ORDER.indexOf(a.g) - ORDER.indexOf(b.g));
 
     sec.innerHTML = `
       <span class="section-label">05 / 相关材料</span>
-      ${grouped.map(g => `
-        <div class="material-group">
-          <div class="material-group-head"><b>${g.name}</b><span>${g.desc}</span></div>
-          <div class="links-grid">
-            ${g.items.map(l => `
-              <a class="link-card" href="${l.href}" data-link-id="${c.links.indexOf(l)}">
-                <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
-                <span class="tx"><b>${l.label}</b><small>${l.note || kindNote[l.kind] || '查看文档'}</small></span>
-                <span class="arrow">${svgIcon(l.kind === 'file' ? 'download' : 'arrowR', 16)}</span>
-              </a>
-            `).join('')}
-          </div>
-        </div>
-      `).join('')}
+      <div class="links-grid">
+        ${items.map(({ l, i, g }) => `
+          <a class="link-card" href="${l.href}" data-link-id="${i}">
+            <span class="ic">${svgIcon(kindIcon[l.kind] || 'link', 18)}</span>
+            <span class="tx">
+              <span class="link-group-tag g-${g}">${GROUP_NAME[g]}</span>
+              <b>${l.label}</b>
+              <small>${l.note || kindNote[l.kind] || '查看文档'}</small>
+            </span>
+            <span class="arrow">${svgIcon(l.kind === 'file' ? 'download' : 'arrowR', 16)}</span>
+          </a>
+        `).join('')}
+      </div>
     `;
     wrap.appendChild(sec);
     sec.querySelectorAll('.link-card').forEach(a => {

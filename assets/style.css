@@ -1358,26 +1358,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 
 /* 演示物料链接 */
-/* 相关材料分三块：技能包 / 示例文档 / 产物 */
-.material-group + .material-group { margin-top: 26px; }
-.material-group-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-.material-group-head b {
-  font-size: 15.5px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.material-group-head span {
-  color: var(--subtle);
-  font-size: 12.5px;
-}
-
-.links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+/* 相关材料：全部卡片排一行，分类用卡片内的小标签表达。
+   minmax 下限取 240px：1200px 内容宽下三张卡能稳定同行，窄屏再自动掉行 */
+.links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
 .link-card {
   display: flex;
   align-items: center;
@@ -1401,6 +1384,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   place-items: center;
 }
 .link-card .ic svg { width: 18px; height: 18px; }
+/* 分类小标签：三类用不同底色区分，不占额外行高 */
+.link-group-tag {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+.link-group-tag.g-skill  { background: var(--accent-soft); color: var(--accent-deep); }
+.link-group-tag.g-sample { background: #fff4e6; color: #a35c00; }
+.link-group-tag.g-output { background: #eef3ff; color: #2f5fd0; }
 .link-card .tx { min-width: 0; }
 .link-card b { display: block; font-size: 14px; font-weight: 600; }
 .link-card small { display: block; margin-top: 3px; color: var(--subtle); font-size: 11.5px; }
